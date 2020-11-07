@@ -50,8 +50,7 @@
     "jest-expo": "~39.0.0",
     "prettier": "^2.1.2",
     "prettier-eslint": "^11.0.0",
-    "prettier-eslint-cli": "^5.0.0",
-    "typescript": "~3.9.5"
+    "prettier-eslint-cli": "^5.0.0"
   },
   "private": true
 }
