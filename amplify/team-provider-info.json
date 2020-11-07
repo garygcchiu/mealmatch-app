@@ -1,0 +1,22 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-mealmatch-dev-114554-authRole",
+      "UnauthRoleArn": "arn:aws:iam::268394913050:role/amplify-mealmatch-dev-114554-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::268394913050:role/amplify-mealmatch-dev-114554-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-mealmatch-dev-114554-deployment",
+      "UnauthRoleName": "amplify-mealmatch-dev-114554-unauthRole",
+      "StackName": "amplify-mealmatch-dev-114554",
+      "StackId": "arn:aws:cloudformation:us-east-1:268394913050:stack/amplify-mealmatch-dev-114554/b5ead590-2118-11eb-9faa-0a1540e225b5",
+      "AmplifyAppId": "d1i6xwarss3i4t"
+    },
+    "categories": {
+      "auth": {
+        "mealmatchff431dc2": {
+          "hostedUIProviderCreds": "[{\"ProviderName\":\"Google\",\"client_id\":\"584861258674-0shblks0rg9e3q1h3eev5hd65n9lmm5n.apps.googleusercontent.com\",\"client_secret\":\"grtdtdkwoMHPazehzAK1EvhD\"}]"
+        }
+      }
+    }
+  }
+}
