@@ -10,14 +10,18 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6d56e5df-681c-49b3-aa06-38503b3fbb47" name="Default Changelist" comment="" />
+    <list default="true" id="6d56e5df-681c-49b3-aa06-38503b3fbb47" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/app" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="JsFlowSettings">
     <service-enabled>true</service-enabled>
@@ -60,7 +64,8 @@
       <workItem from="1604451241755" duration="1235000" />
       <workItem from="1604455841662" duration="9364000" />
       <workItem from="1604544461025" duration="7971000" />
-      <workItem from="1604773028462" duration="86000" />
+      <workItem from="1604773028462" duration="233000" />
+      <workItem from="1604773278743" duration="102000" />
     </task>
     <servers />
   </component>
@@ -79,16 +84,21 @@
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/app" />
+    </ignored-roots>
+  </component>
   <component name="WindowStateProjectService">
     <state x="1018" y="474" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1604767478046">
       <screen x="0" y="0" width="2560" height="1440" />
     </state>
     <state x="1018" y="474" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/2560.163.1920.1080/0.0.2560.1440@0.0.2560.1440" timestamp="1604767478046" />
-    <state x="789" y="376" key="SettingsEditor" timestamp="1604773109595">
+    <state x="789" y="376" key="SettingsEditor" timestamp="1604773290009">
       <screen x="0" y="23" width="2560" height="1417" />
     </state>
     <state x="789" y="359" key="SettingsEditor/2560.163.1920.1080/0.0.2560.1440@0.0.2560.1440" timestamp="1604456290705" />
-    <state x="789" y="376" key="SettingsEditor/2560.186.1920.1057/0.23.2560.1417@0.23.2560.1417" timestamp="1604773109595" />
+    <state x="789" y="376" key="SettingsEditor/2560.186.1920.1057/0.23.2560.1417@0.23.2560.1417" timestamp="1604773290009" />
     <state x="945" y="331" width="670" height="676" key="search.everywhere.popup" timestamp="1604456235668">
       <screen x="0" y="0" width="2560" height="1440" />
     </state>
