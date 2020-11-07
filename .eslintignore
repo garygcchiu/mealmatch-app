@@ -1,0 +1,8 @@
+node_modules/*
+src/**/node_modules/*
+!src/layers/nodejs/node_modules/*
+.aws*
+build
+.expo*
+amplify/*
+babel.config.js
