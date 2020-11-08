@@ -8,6 +8,7 @@ import { Text, View, Button } from '../components/Themed';
 
 function ProfileScreen(props) {
     const { oAuthUser, signOut } = props;
+    //console.log('oAuthUser = ', oAuthUser);
 
     return (
         <View style={styles.container}>
@@ -18,10 +19,6 @@ function ProfileScreen(props) {
                 darkColor="rgba(255,255,255,0.1)"
             />
             <EditScreenInfo path="/screens/TabTwoScreen.js" />
-            <Text>
-                User:{' '}
-                {oAuthUser ? JSON.stringify(oAuthUser.attributes) : 'None'}
-            </Text>
             <Button title={'Sign Out'} onPress={signOut} />
         </View>
     );

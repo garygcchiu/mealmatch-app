@@ -28,6 +28,22 @@ Amplify.configure({
         ...awsconfig.oauth,
         urlOpener,
     },
+    API: {
+        endpoints: [
+            {
+                name: 'mealmatch-dev',
+                endpoint: 'https://dev.api.mealmatch.io',
+            },
+            {
+                name: 'mealmatch-staging',
+                endpoint: 'https://staging.api.mealmatch.io',
+            },
+            {
+                name: 'mealmatch-prod',
+                endpoint: 'https://prod.api.mealmatch.io',
+            },
+        ],
+    },
 });
 
 function App() {
