@@ -6,6 +6,7 @@ import {
 import { createStackNavigator } from '@react-navigation/stack';
 import React, { useContext } from 'react';
 import { ColorSchemeName } from 'react-native';
+import { withOAuth } from 'aws-amplify-react-native';
 
 import NotFoundScreen from '../screens/NotFoundScreen';
 import BottomTabNavigator from './BottomTabNavigator';
@@ -14,13 +15,15 @@ import AuthScreen from '../screens/AuthScreen';
 
 // If you are not familiar with React Navigation, we recommend going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
-export default function Navigation({ colorScheme }) {
+function Navigation(props) {
+    const { colorScheme, oAuthUser } = props;
+
     return (
         <NavigationContainer
             linking={LinkingConfiguration}
             theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
         >
-            <RootNavigator />
+            <RootNavigator isLoggedIn={!!oAuthUser} />
         </NavigationContainer>
     );
 }
@@ -29,10 +32,10 @@ export default function Navigation({ colorScheme }) {
 // Read more here: https://reactnavigation.org/docs/modal
 const Stack = createStackNavigator();
 
-function RootNavigator() {
+function RootNavigator({ isLoggedIn }) {
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-            {true ? (
+            {isLoggedIn ? (
                 <Stack.Screen name="Root" component={BottomTabNavigator} />
             ) : (
                 <Stack.Screen name="Login" component={AuthScreen} />
@@ -45,3 +48,5 @@ function RootNavigator() {
         </Stack.Navigator>
     );
 }
+
+export default withOAuth(Navigation);
