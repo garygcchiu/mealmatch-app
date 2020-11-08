@@ -4,7 +4,7 @@ import { Text, View } from '../components/Themed';
 import { withOAuth } from 'aws-amplify-react-native';
 
 function AuthScreen(props) {
-    const { googleSignIn, hostedUISignIn } = props;
+    const { googleSignIn, facebookSignIn, hostedUISignIn } = props;
 
     return (
         <View style={styles.container}>
@@ -14,6 +14,7 @@ function AuthScreen(props) {
 
                 {/* Go directly to a configured identity provider */}
                 <Button title="Google" onPress={googleSignIn} />
+                <Button title="Facebook" onPress={facebookSignIn} />
             </>
         </View>
     );

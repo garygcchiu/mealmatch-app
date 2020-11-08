@@ -14,7 +14,7 @@
     "categories": {
       "auth": {
         "mealmatchaba2708a": {
-          "hostedUIProviderCreds": "[{\"ProviderName\":\"Google\",\"client_id\":\"584861258674-0shblks0rg9e3q1h3eev5hd65n9lmm5n.apps.googleusercontent.com\",\"client_secret\":\"grtdtdkwoMHPazehzAK1EvhD\"}]"
+          "hostedUIProviderCreds": "[{\"ProviderName\":\"Facebook\",\"client_id\":\"3715805221803245\",\"client_secret\":\"b629fcbbd636f3629457346cdeb5d7d6\"},{\"ProviderName\":\"Google\",\"client_id\":\"584861258674-0shblks0rg9e3q1h3eev5hd65n9lmm5n.apps.googleusercontent.com\",\"client_secret\":\"grtdtdkwoMHPazehzAK1EvhD\"}]"
         }
       }
     }
