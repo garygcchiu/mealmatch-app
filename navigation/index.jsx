@@ -11,7 +11,6 @@ import NotFoundScreen from '../screens/NotFoundScreen';
 import BottomTabNavigator from './BottomTabNavigator';
 import LinkingConfiguration from './LinkingConfiguration';
 import AuthScreen from '../screens/AuthScreen';
-import GlobalContext from '../context/GlobalContext';
 
 // If you are not familiar with React Navigation, we recommend going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
@@ -31,11 +30,9 @@ export default function Navigation({ colorScheme }) {
 const Stack = createStackNavigator();
 
 function RootNavigator() {
-    const { user } = useContext(GlobalContext);
-
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-            {!!user ? (
+            {true ? (
                 <Stack.Screen name="Root" component={BottomTabNavigator} />
             ) : (
                 <Stack.Screen name="Login" component={AuthScreen} />

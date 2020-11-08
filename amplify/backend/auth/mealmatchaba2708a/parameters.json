@@ -1,8 +1,8 @@
 {
-    "identityPoolName": "mealmatchff431dc2_identitypool_ff431dc2",
+    "identityPoolName": "mealmatchaba2708a_identitypool_aba2708a",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "mealmaff431dc2",
-    "userPoolName": "mealmatchff431dc2_userpool_ff431dc2",
+    "resourceNameTruncated": "mealmaaba2708a",
+    "userPoolName": "mealmatchaba2708a_userpool_aba2708a",
     "autoVerifiedAttributes": [
         "email"
     ],
@@ -28,10 +28,10 @@
     "userpoolClientReadAttributes": [
         "email"
     ],
-    "userpoolClientLambdaRole": "mealmaff431dc2_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "mealmaaba2708a_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "ff431dc2",
-    "resourceName": "mealmatchff431dc2",
+    "sharedId": "aba2708a",
+    "resourceName": "mealmatchaba2708a",
     "authSelections": "identityPoolAndUserPool",
     "authRoleArn": {
         "Fn::GetAtt": [
@@ -47,13 +47,21 @@
     },
     "useDefault": "defaultSocial",
     "hostedUI": true,
-    "hostedUIDomainName": "mealmatchff431dc2-ff431dc2",
+    "usernameAttributes": [
+        "email"
+    ],
+    "triggers": "{}",
+    "hostedUIDomainName": "mealmatch",
     "authProvidersUserPool": [
         "Google"
     ],
     "hostedUIProviderMeta": "[{\"ProviderName\":\"Google\",\"authorize_scopes\":\"openid email profile\",\"AttributeMapping\":{\"email\":\"email\",\"username\":\"sub\"}}]",
-    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://localhost/\"],\"LogoutURLs\":[\"https://localhost/\"]}",
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"exp://127.0.0.1:19000/\",\"mealmatch://\"],\"LogoutURLs\":[\"exp://127.0.0.1/\"]}",
     "userPoolGroupList": [],
     "serviceName": "Cognito",
+    "parentStack": {
+        "Ref": "AWS::StackId"
+    },
+    "permissions": [],
     "dependsOn": []
 }
