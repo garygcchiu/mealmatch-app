@@ -1,20 +1,20 @@
 {
   "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-mealmatch-dev-114554-authRole",
-      "UnauthRoleArn": "arn:aws:iam::268394913050:role/amplify-mealmatch-dev-114554-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::268394913050:role/amplify-mealmatch-dev-114554-authRole",
+      "AuthRoleName": "amplify-mealmatch-dev-205045-authRole",
+      "UnauthRoleArn": "arn:aws:iam::268394913050:role/amplify-mealmatch-dev-205045-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::268394913050:role/amplify-mealmatch-dev-205045-authRole",
       "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-mealmatch-dev-114554-deployment",
-      "UnauthRoleName": "amplify-mealmatch-dev-114554-unauthRole",
-      "StackName": "amplify-mealmatch-dev-114554",
-      "StackId": "arn:aws:cloudformation:us-east-1:268394913050:stack/amplify-mealmatch-dev-114554/b5ead590-2118-11eb-9faa-0a1540e225b5",
-      "AmplifyAppId": "d1i6xwarss3i4t"
+      "DeploymentBucketName": "amplify-mealmatch-dev-205045-deployment",
+      "UnauthRoleName": "amplify-mealmatch-dev-205045-unauthRole",
+      "StackName": "amplify-mealmatch-dev-205045",
+      "StackId": "arn:aws:cloudformation:us-east-1:268394913050:stack/amplify-mealmatch-dev-205045/d3ae8c10-2164-11eb-945b-0a479dbf9bdf",
+      "AmplifyAppId": "d2zi3o2hf9xa6k"
     },
     "categories": {
       "auth": {
-        "mealmatchff431dc2": {
-          "hostedUIProviderCreds": "[{\"ProviderName\":\"Google\",\"client_id\":\"584861258674-0shblks0rg9e3q1h3eev5hd65n9lmm5n.apps.googleusercontent.com\",\"client_secret\":\"grtdtdkwoMHPazehzAK1EvhD\"}]"
+        "mealmatchaba2708a": {
+          "hostedUIProviderCreds": "[{\"ProviderName\":\"Facebook\",\"client_id\":\"3715805221803245\",\"client_secret\":\"b629fcbbd636f3629457346cdeb5d7d6\"},{\"ProviderName\":\"Google\",\"client_id\":\"584861258674-0shblks0rg9e3q1h3eev5hd65n9lmm5n.apps.googleusercontent.com\",\"client_secret\":\"grtdtdkwoMHPazehzAK1EvhD\"}]"
         }
       }
     }

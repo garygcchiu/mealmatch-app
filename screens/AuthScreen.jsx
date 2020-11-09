@@ -1,23 +1,26 @@
 import React, { useContext } from 'react';
 import { StyleSheet, Button } from 'react-native';
 import { Text, View } from '../components/Themed';
-import { Auth } from 'aws-amplify';
-import GlobalContext from '../context/GlobalContext';
+import { withOAuth } from 'aws-amplify-react-native';
 
-function AuthScreen() {
-    const { user, setUser } = useContext(GlobalContext);
+function AuthScreen(props) {
+    const { googleSignIn, facebookSignIn, hostedUISignIn } = props;
 
     return (
         <View style={styles.container}>
-            <Button
-                title={'Sign In With Google'}
-                onPress={() => Auth.federatedSignIn({ provider: 'Google' })}
-            />
+            <>
+                {/* Go to the Cognito Hosted UI */}
+                <Button title="Cognito" onPress={hostedUISignIn} />
+
+                {/* Go directly to a configured identity provider */}
+                <Button title="Google" onPress={googleSignIn} />
+                <Button title="Facebook" onPress={facebookSignIn} />
+            </>
         </View>
     );
 }
 
-export default AuthScreen;
+export default withOAuth(AuthScreen);
 
 const styles = StyleSheet.create({
     container: {

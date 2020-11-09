@@ -1,10 +1,22 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
+import * as placesApi from '../api/placesApi';
+import { getCurrentLocation } from '../utils/location';
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 
 export default function SearchScreen() {
+    useEffect(() => {
+        (async () => {
+            const searchResponse = await placesApi.searchPlaces(
+                'Sushi',
+                await getCurrentLocation()
+            );
+            console.log('search response = ', searchResponse);
+        })();
+    }, []);
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Search</Text>

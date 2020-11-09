@@ -5,7 +5,13 @@ import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 
 export default function ExploreScreen() {
-    return <View style={styles.container}></View>;
+    return (
+        <View style={styles.container}>
+            <View style={styles.title}>
+                <Text>Explore</Text>
+            </View>
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({

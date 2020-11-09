@@ -1,11 +1,15 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
 import { Auth } from 'aws-amplify';
+import { withOAuth } from 'aws-amplify-react-native';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View, Button } from '../components/Themed';
 
-function ProfileScreen() {
+function ProfileScreen(props) {
+    const { oAuthUser, signOut } = props;
+    //console.log('oAuthUser = ', oAuthUser);
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Profile</Text>
@@ -15,15 +19,12 @@ function ProfileScreen() {
                 darkColor="rgba(255,255,255,0.1)"
             />
             <EditScreenInfo path="/screens/TabTwoScreen.js" />
-            <Button
-                title={'Sign Out'}
-                onPress={() => Auth.signOut({ global: true })}
-            />
+            <Button title={'Sign Out'} onPress={signOut} />
         </View>
     );
 }
 
-export default ProfileScreen;
+export default withOAuth(ProfileScreen);
 
 const styles = StyleSheet.create({
     container: {

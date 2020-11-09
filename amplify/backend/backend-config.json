@@ -1,6 +1,6 @@
 {
   "auth": {
-    "mealmatchff431dc2": {
+    "mealmatchaba2708a": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],

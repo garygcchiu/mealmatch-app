@@ -5,7 +5,6 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
-import { GlobalProvider } from './context/GlobalContext';
 import * as WebBrowser from 'expo-web-browser';
 import { Linking, Platform } from 'react-native';
 import Amplify from 'aws-amplify';
@@ -29,9 +28,25 @@ Amplify.configure({
         ...awsconfig.oauth,
         urlOpener,
     },
+    API: {
+        endpoints: [
+            {
+                name: 'mealmatch-dev',
+                endpoint: 'https://dev.api.mealmatch.io',
+            },
+            {
+                name: 'mealmatch-staging',
+                endpoint: 'https://staging.api.mealmatch.io',
+            },
+            {
+                name: 'mealmatch-prod',
+                endpoint: 'https://prod.api.mealmatch.io',
+            },
+        ],
+    },
 });
 
-export default function App() {
+function App() {
     const isLoadingComplete = useCachedResources();
     const colorScheme = useColorScheme();
 
@@ -41,10 +56,10 @@ export default function App() {
 
     return (
         <SafeAreaProvider>
-            <GlobalProvider>
-                <Navigation colorScheme={colorScheme} />
-                <StatusBar />
-            </GlobalProvider>
+            <Navigation colorScheme={colorScheme} />
+            <StatusBar />
         </SafeAreaProvider>
     );
 }
+
+export default App;
