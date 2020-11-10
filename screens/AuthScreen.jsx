@@ -9,7 +9,6 @@ import {
     Card,
     ButtonGroup,
     Input,
-    Icon,
     Button,
 } from 'react-native-elements';
 
@@ -29,6 +28,8 @@ function AuthScreen(props) {
     const [showSendVerificationAgain, setShowSendVerificationAgain] = useState(
         false
     );
+    const [loginLoading, setLoginLoading] = useState(false);
+    const [verificationLoading, setVerificationLoading] = useState(false);
     const [usernameError, setUsernameError] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const [verificationError, setVerificationError] = useState('');
@@ -67,6 +68,7 @@ function AuthScreen(props) {
     };
 
     const handleSignIn = async (email, password) => {
+        setLoginLoading(true);
         try {
             await Auth.signIn(email, password);
         } catch (err) {
@@ -78,9 +80,11 @@ function AuthScreen(props) {
                 setPasswordError('Unexpected error, please try again later.');
             }
         }
+        setLoginLoading(false);
     };
 
     const handleVerificationCodeSubmit = async () => {
+        setVerificationLoading(true);
         try {
             const confirmation = await Auth.confirmSignUp(
                 email,
@@ -93,6 +97,7 @@ function AuthScreen(props) {
             setVerificationError(err.message);
             console.log('error confirming sign up', err);
         }
+        setVerificationLoading(false);
     };
 
     return (
@@ -143,6 +148,7 @@ function AuthScreen(props) {
                             title={'Submit Verification'}
                             onPress={handleVerificationCodeSubmit}
                             buttonStyle={styles.verificationButton}
+                            loading={verificationLoading}
                         />
                     </View>
                 )}
@@ -157,6 +163,7 @@ function AuthScreen(props) {
                             ? handleSignIn(email, password)
                             : handleSignUp(email, password)
                     }
+                    loading={loginLoading}
                 />
                 <SocialIcon
                     type={'google'}
