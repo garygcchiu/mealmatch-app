@@ -40,6 +40,8 @@ function AuthScreen(props) {
         setUsernameError('');
         setPasswordError('');
         setShowSendVerificationAgain(false);
+        setVerificationError('');
+        setVerificationCode('');
 
         try {
             await Auth.signUp({
@@ -67,8 +69,11 @@ function AuthScreen(props) {
         }, 10000);
     };
 
-    const handleSignIn = async (email, password) => {
-        setLoginLoading(true);
+    const handleSignIn = async (email, password, animateLoading = true) => {
+        if (animateLoading) {
+            setLoginLoading(true);
+        }
+
         try {
             await Auth.signIn(email, password);
         } catch (err) {
@@ -129,7 +134,7 @@ function AuthScreen(props) {
                 {showVerification && (
                     <View>
                         <Input
-                            placeholder={'Verification Code'}
+                            placeholder={'Email Verification Code'}
                             value={verificationCode}
                             onChangeText={(value) => setVerificationCode(value)}
                             errorMessage={
