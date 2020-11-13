@@ -27,6 +27,7 @@ Amplify.configure({
     oauth: {
         ...awsconfig.oauth,
         urlOpener,
+        domain: 'auth.mealmatch.io',
     },
     API: {
         endpoints: [
