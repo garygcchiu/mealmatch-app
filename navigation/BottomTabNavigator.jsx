@@ -10,7 +10,7 @@ import AppetiteScreen from '../screens/AppetiteScreen';
 import SearchScreen from '../screens/SearchScreen';
 import FriendsScreen from '../screens/FriendsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
-import { Button, View } from '../components/Themed';
+import AppetiteIcon from '../components/AppetiteIcon';
 
 const BottomTab = createBottomTabNavigator();
 
@@ -35,8 +35,8 @@ export default function BottomTabNavigator() {
                 name="Appetite"
                 component={TabTwoNavigator}
                 options={{
-                    tabBarIcon: ({ color }) => (
-                        <TabBarIcon name="ios-list-box" color={color} />
+                    tabBarIcon: ({ focused, color }) => (
+                        <AppetiteIcon focused={focused} color={color} />
                     ),
                 }}
             />

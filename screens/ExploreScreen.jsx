@@ -10,7 +10,9 @@ import { View } from '../components/Themed';
 
 const searchOptions = {
     includeScore: true,
-    shouldSort: true,
+    //shouldSort: true,
+    isCaseSensitive: false,
+    findAllMatches: true,
     keys: ['name'],
 };
 
@@ -26,9 +28,7 @@ const categoriesDefaultSort = (a, b) =>
 export default function ExploreScreen({ navigation }) {
     const colorScheme = useColorScheme();
     const [searchTerm, setSearchTerm] = useState('');
-    const [categories, setCategories] = useState(
-        Categories.sort(categoriesDefaultSort)
-    );
+    const [categories, setCategories] = useState(Categories);
     const [showSearch, setShowSearch] = useState(false);
 
     useLayoutEffect(() => {
@@ -59,6 +59,7 @@ export default function ExploreScreen({ navigation }) {
         } else {
             setCategories(Categories);
         }
+        console.log('results = ', fuse.search(text));
     };
 
     return (
