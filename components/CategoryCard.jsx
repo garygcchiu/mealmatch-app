@@ -8,7 +8,7 @@ import { Text, View } from './Themed';
 import React from 'react';
 import { Icon } from 'react-native-elements';
 
-const cardLength = Dimensions.get('window').width / 2 - 26;
+const cardLength = Dimensions.get('window').width - 20;
 
 const splitter = (str, l) => {
     const strs = [];
@@ -28,16 +28,25 @@ const getItemTitle = (title) => {
     return splitter(title, 15);
 };
 
-export default function CategoryCard({ title, image, inAppetite }) {
+export default function CategoryCard({
+    title,
+    image,
+    isInAppetite = false,
+    onActionButtonPress,
+}) {
     return (
         <View style={styles.container}>
             <TouchableOpacity activeOpacity={0.5}>
                 <ImageBackground source={image} style={styles.imageBackground}>
-                    <Text style={styles.text}>{getItemTitle(title)}</Text>
+                    <Text style={styles.text}>{title}</Text>
                     <Icon
                         type={'ionicon'}
-                        name={'md-checkmark-circle'}
-                        color={'green'}
+                        name={
+                            isInAppetite
+                                ? 'md-checkmark-circle'
+                                : 'ios-add-circle'
+                        }
+                        color={isInAppetite ? 'green' : 'black'}
                         size={45}
                         iconStyle={{
                             overflow: 'hidden',
@@ -52,7 +61,7 @@ export default function CategoryCard({ title, image, inAppetite }) {
                             right: 10,
                             bottom: 10,
                         }}
-                        onPress={() => console.log('pressed!!')}
+                        onPress={onActionButtonPress}
                     />
                 </ImageBackground>
             </TouchableOpacity>
@@ -62,20 +71,23 @@ export default function CategoryCard({ title, image, inAppetite }) {
 
 const styles = StyleSheet.create({
     container: {
-        width: Dimensions.get('window').width / 2 - 8,
-        marginTop: 15,
+        width: Dimensions.get('window').width,
+        marginTop: 12,
     },
     imageBackground: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        height: cardLength,
+        height: 60,
         width: cardLength,
         alignSelf: 'center',
     },
     text: {
         fontSize: 20,
-        textAlign: 'center',
+        fontWeight: '500',
+        textAlign: 'left',
         color: 'white',
+        alignSelf: 'flex-start',
+        paddingLeft: 10,
     },
 });

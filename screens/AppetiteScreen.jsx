@@ -1,19 +1,28 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Image, StyleSheet } from 'react-native';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
+import GlobalContext from '../utils/context';
 
 export default function AppetiteScreen() {
+    const {
+        userAppetite,
+        addToUserAppetite,
+        removeFromUserAppetite,
+    } = useContext(GlobalContext);
+
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Appetite</Text>
             <View
                 style={styles.separator}
                 lightColor="#eee"
                 darkColor="rgba(255,255,255,0.1)"
             />
-            <EditScreenInfo path="/screens/TabTwoScreen.js" />
+            <Text>User Appetite:</Text>
+            {userAppetite.map((a) => (
+                <Text key={a}>{a}</Text>
+            ))}
         </View>
     );
 }
