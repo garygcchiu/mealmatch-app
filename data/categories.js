@@ -164,12 +164,6 @@ export default [
         supported_countries: [],
     },
     {
-        id: '5283c7b4e4b094cb91ec88d6',
-        name: 'Kokoreç Restaurant',
-        image: require('../assets/images/categories/test.jpg'),
-        supported_countries: ['TR', 'CY', 'IR'],
-    },
-    {
         id: '4eb1bd1c3b7b55596b4a748f',
         name: 'Filipino Restaurant',
         image: require('../assets/images/categories/test.jpg'),
@@ -186,12 +180,6 @@ export default [
         name: 'Mexican Restaurant',
         image: require('../assets/images/categories/test.jpg'),
         supported_countries: [],
-    },
-    {
-        id: '55a5a1ebe4b013909087cb7f',
-        name: 'Trattoria/Osteria',
-        image: require('../assets/images/categories/test.jpg'),
-        supported_countries: ['IT', 'DE'],
     },
     {
         id: '55a5a1ebe4b013909087cb98',
@@ -344,47 +332,10 @@ export default [
         supported_countries: [],
     },
     {
-        id: '52e928d0bcbc57f1066b7e98',
-        name: 'Tatar Restaurant',
-        image: require('../assets/images/categories/test.jpg'),
-        supported_countries: [
-            'RU',
-            'UA',
-            'KZ',
-            'BY',
-            'AZ',
-            'UZ',
-            'TM',
-            'GE',
-            'AM',
-            'TJ',
-            'KY',
-            'MO',
-        ],
-    },
-    {
         id: '57558b36e4b065ecebd306b2',
         name: 'Labour Canteen',
         image: require('../assets/images/categories/test.jpg'),
         supported_countries: ['FR'],
-    },
-    {
-        id: '58daa1558bbb0b01f18ec1d9',
-        name: 'Botanero',
-        image: require('../assets/images/categories/test.jpg'),
-        supported_countries: ['MX'],
-    },
-    {
-        id: '55a5a1ebe4b013909087cb74',
-        name: 'Piadineria',
-        image: require('../assets/images/categories/test.jpg'),
-        supported_countries: ['IT'],
-    },
-    {
-        id: '55a5a1ebe4b013909087cbb3',
-        name: 'Molise Restaurant',
-        image: require('../assets/images/categories/test.jpg'),
-        supported_countries: ['IT'],
     },
     {
         id: '4bf58dd8d48988d14f941735',
@@ -403,12 +354,6 @@ export default [
         name: 'Persian Restaurant',
         image: require('../assets/images/categories/test.jpg'),
         supported_countries: [],
-    },
-    {
-        id: '56aa371be4b08b9a8d573535',
-        name: 'Kumpir Restaurant',
-        image: require('../assets/images/categories/test.jpg'),
-        supported_countries: ['TR', 'DE', 'CY', 'IR'],
     },
     {
         id: '57558b36e4b065ecebd306ba',

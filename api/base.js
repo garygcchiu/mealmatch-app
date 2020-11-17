@@ -22,3 +22,16 @@ export async function standardGet(path, params) {
 
     return API.get(getApiName(), `${path}?${urlParams}`, init);
 }
+
+export async function standardPost(path, params) {
+    const init = {
+        headers: {
+            Authorization: `Bearer ${(await Auth.currentSession())
+                .getIdToken()
+                .getJwtToken()}`,
+        },
+        body: params,
+    };
+
+    return API.post(getApiName(), path, init);
+}

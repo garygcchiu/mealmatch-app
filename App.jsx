@@ -9,6 +9,7 @@ import * as WebBrowser from 'expo-web-browser';
 import { Linking, Platform } from 'react-native';
 import Amplify from 'aws-amplify';
 import awsconfig from './aws-exports';
+import { GlobalProvider } from './utils/context';
 
 async function urlOpener(url, redirectUrl) {
     const { type, url: newUrl } = await WebBrowser.openAuthSessionAsync(
@@ -57,8 +58,10 @@ function App() {
 
     return (
         <SafeAreaProvider>
-            <Navigation colorScheme={colorScheme} />
-            <StatusBar />
+            <GlobalProvider>
+                <Navigation colorScheme={colorScheme} />
+                <StatusBar />
+            </GlobalProvider>
         </SafeAreaProvider>
     );
 }
