@@ -22,6 +22,10 @@ export class GlobalProvider extends React.Component {
                 );
                 this.setState({ userAppetite: removeRes });
             },
+            clearUserAppetite: () => {
+                userApi.editAppetite([]);
+                this.setState({ userAppetite: [] });
+            },
             fetchUserAppetite: async () => {
                 const userAppetite = await userApi.getAppetite();
                 this.setState({ userAppetite });

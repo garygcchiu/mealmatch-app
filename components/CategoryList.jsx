@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, memo } from 'react';
 import { SectionList, StyleSheet } from 'react-native';
 import { View, Text } from './Themed';
 import CategoryCard from './CategoryCard';
@@ -49,6 +49,7 @@ const CategoryList = ({ categories }) => {
             horizontal={false}
             style={{ width: '100%' }}
             sections={categories}
+            maxToRenderPerBatch={10}
         />
     );
 };
@@ -69,4 +70,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default CategoryList;
+export default memo(CategoryList);

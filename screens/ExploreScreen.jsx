@@ -1,15 +1,16 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { StyleSheet, SectionList, SafeAreaView } from 'react-native';
+import { StyleSheet, SafeAreaView, Dimensions } from 'react-native';
 import Fuse from 'fuse.js';
-import { SearchBar, Button, Icon } from 'react-native-elements';
+import { SearchBar, Button, Icon, Overlay } from 'react-native-elements';
 
 import useColorScheme from '../hooks/useColorScheme';
 import Categories from '../data/categories';
 import CategoryList from '../components/CategoryList';
-import { View } from '../components/Themed';
+import { View, Text } from '../components/Themed';
 import GlobalContext from '../utils/context';
 import ExploreFilter from '../components/ExploreFilter';
 import { filterMap } from '../data/filterOptions';
+import OverlayModal from '../components/OverlayModal';
 
 const searchOptions = {
     includeScore: true,
@@ -26,10 +27,13 @@ export default function ExploreScreen({ navigation }) {
     const [searchTerm, setSearchTerm] = useState('');
     const [categories, setCategories] = useState([]);
     const [showFilter, setShowFilter] = useState(false);
+    const [showClearOverlay, setShowClearOverlay] = useState(false);
     const [selectedFilterOption, setSelectedFilterOption] = useState(
         filterMap.POPULAR
     );
-    const { userAppetite, fetchUserAppetite } = useContext(GlobalContext);
+    const { userAppetite, fetchUserAppetite, clearUserAppetite } = useContext(
+        GlobalContext
+    );
 
     const getSectionedCategories = (filter, searchResults = []) => {
         if (filter === filterMap.POPULAR) {
@@ -178,6 +182,7 @@ export default function ExploreScreen({ navigation }) {
                             />
                         }
                         buttonStyle={styles.optionsButton}
+                        onPress={() => setShowClearOverlay(true)}
                     />
                 </View>
                 <CategoryList categories={categories} />
@@ -186,6 +191,19 @@ export default function ExploreScreen({ navigation }) {
                     handleClose={() => setShowFilter(false)}
                     selectedOption={selectedFilterOption}
                     handleOptionPress={(option) => handleFilterChange(option)}
+                />
+                <OverlayModal
+                    title={'Confirmation'}
+                    onBackdropPress={() => setShowClearOverlay(false)}
+                    onCancelPress={() => setShowClearOverlay(false)}
+                    onConfirmPress={() => {
+                        clearUserAppetite();
+                        setShowClearOverlay(false);
+                    }}
+                    description={
+                        'This will clear all categories from your appetite list. Are you sure?'
+                    }
+                    showOverlay={showClearOverlay}
                 />
             </View>
         </SafeAreaView>
@@ -197,10 +215,6 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'flex-start',
-    },
-    title: {
-        fontSize: 20,
-        fontWeight: 'bold',
     },
     optionsContainer: {
         display: 'flex',
