@@ -3,8 +3,16 @@ import { SectionList, StyleSheet } from 'react-native';
 import { View, Text } from './Themed';
 import CategoryCard from './CategoryCard';
 import GlobalContext from '../utils/context';
+import { Button, Icon } from 'react-native-elements';
+import useColorScheme from '../hooks/useColorScheme';
+import ClearAppetiteButton from './ClearAppetiteButton';
 
-const CategoryList = ({ categories }) => {
+const CategoryList = ({
+    categories,
+    showClearAllButton = false,
+    onClearAllButtonPress,
+}) => {
+    const colorScheme = useColorScheme();
     const {
         userAppetite,
         addToUserAppetite,
@@ -30,6 +38,11 @@ const CategoryList = ({ categories }) => {
         return (
             <View style={styles.sectionHeaderContainer}>
                 <Text style={styles.sectionHeaderText}>{title}</Text>
+                {showClearAllButton && (
+                    <ClearAppetiteButton
+                        onButtonPress={onClearAllButtonPress}
+                    />
+                )}
             </View>
         );
     };
@@ -67,6 +80,10 @@ const styles = StyleSheet.create({
     sectionHeaderContainer: {
         borderBottomWidth: 1,
         borderBottomColor: '#aeaeaf',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingRight: 4,
     },
 });
 

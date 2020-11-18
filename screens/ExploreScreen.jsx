@@ -11,6 +11,7 @@ import GlobalContext from '../utils/context';
 import ExploreFilter from '../components/ExploreFilter';
 import { filterMap } from '../data/filterOptions';
 import OverlayModal from '../components/OverlayModal';
+import ClearAppetiteButton from '../components/ClearAppetiteButton';
 
 const searchOptions = {
     includeScore: true,
@@ -170,19 +171,8 @@ export default function ExploreScreen({ navigation }) {
                         buttonStyle={styles.optionsButton}
                         onPress={() => setShowFilter(true)}
                     />
-                    <Button
-                        icon={
-                            <Icon
-                                type={'material-community'}
-                                name="file-document-box-remove-outline"
-                                size={22}
-                                color={
-                                    colorScheme === 'light' ? 'black' : 'white'
-                                }
-                            />
-                        }
-                        buttonStyle={styles.optionsButton}
-                        onPress={() => setShowClearOverlay(true)}
+                    <ClearAppetiteButton
+                        onButtonPress={() => setShowClearOverlay(true)}
                     />
                 </View>
                 <CategoryList categories={categories} />

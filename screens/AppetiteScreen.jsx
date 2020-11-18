@@ -1,18 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Image, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import Categories from '../data/categories';
-import { Text, View } from '../components/Themed';
+import { View } from '../components/Themed';
 import GlobalContext from '../utils/context';
 import CategoryList from '../components/CategoryList';
+import OverlayModal from '../components/OverlayModal';
 
 export default function AppetiteScreen() {
-    const {
-        userAppetite,
-        addToUserAppetite,
-        removeFromUserAppetite,
-    } = useContext(GlobalContext);
+    const { userAppetite, clearUserAppetite } = useContext(GlobalContext);
     const [displayAppetite, setDisplayAppetite] = useState([]);
+    const [showClearOverlay, setShowClearOverlay] = useState(false);
 
     useEffect(() => {
         setDisplayAppetite([
@@ -23,11 +21,28 @@ export default function AppetiteScreen() {
                 ),
             },
         ]);
-    }, []);
+    }, [userAppetite]);
 
     return (
         <View style={styles.container}>
-            <CategoryList categories={displayAppetite} />
+            <CategoryList
+                categories={displayAppetite}
+                showClearAllButton
+                onClearAllButtonPress={() => setShowClearOverlay(true)}
+            />
+            <OverlayModal
+                title={'Confirmation'}
+                onBackdropPress={() => setShowClearOverlay(false)}
+                onCancelPress={() => setShowClearOverlay(false)}
+                onConfirmPress={() => {
+                    clearUserAppetite();
+                    setShowClearOverlay(false);
+                }}
+                description={
+                    'This will clear all categories from your appetite list. Are you sure?'
+                }
+                showOverlay={showClearOverlay}
+            />
         </View>
     );
 }
