@@ -8,13 +8,13 @@ import { Text, View } from '../components/Themed';
 
 export default function SearchScreen() {
     useEffect(() => {
-        (async () => {
-            const searchResponse = await placesApi.searchPlaces(
-                'Sushi',
-                await getCurrentLocation()
-            );
-            console.log('search response = ', searchResponse);
-        })();
+        // (async () => {
+        //     const searchResponse = await placesApi.searchPlaces(
+        //         'Sushi',
+        //         await getCurrentLocation()
+        //     );
+        //     console.log('search response = ', searchResponse);
+        // })();
     }, []);
 
     return (
