@@ -88,7 +88,7 @@ function TabOneNavigator() {
                 name="ExploreScreen"
                 component={ExploreScreen}
                 options={{
-                    headerTitle: 'Explore',
+                    headerShown: false,
                 }}
             />
         </TabOneStack.Navigator>

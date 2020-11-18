@@ -1,17 +1,17 @@
-import React, { useState, useLayoutEffect, useContext, useEffect } from 'react';
-import { StyleSheet, FlatList } from 'react-native';
+import React, { useState, useContext, useEffect } from 'react';
+import { StyleSheet, SafeAreaView, Dimensions } from 'react-native';
 import Fuse from 'fuse.js';
-import { SearchBar, Button, Icon } from 'react-native-elements';
+import { SearchBar, Button, Icon, Overlay } from 'react-native-elements';
 
 import useColorScheme from '../hooks/useColorScheme';
 import Categories from '../data/categories';
-import CategoryCard from '../components/CategoryCard';
-import { View } from '../components/Themed';
+import CategoryList from '../components/CategoryList';
+import { View, Text } from '../components/Themed';
 import GlobalContext from '../utils/context';
-
-const searchableCategories = Categories.filter(
-    (c) => !c.supported_countries.length
-);
+import ExploreFilter from '../components/ExploreFilter';
+import { filterMap } from '../data/filterOptions';
+import OverlayModal from '../components/OverlayModal';
+import ClearAppetiteButton from '../components/ClearAppetiteButton';
 
 const searchOptions = {
     includeScore: true,
@@ -21,105 +21,182 @@ const searchOptions = {
     keys: ['name'],
 };
 
-const fuse = new Fuse(searchableCategories, searchOptions);
-
-const categoriesDefaultSort = (a, b) =>
-    a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
+let fuse;
 
 export default function ExploreScreen({ navigation }) {
     const colorScheme = useColorScheme();
     const [searchTerm, setSearchTerm] = useState('');
-    const [categories, setCategories] = useState(searchableCategories);
-    const [showSearch, setShowSearch] = useState(false);
-    const {
-        userAppetite,
-        addToUserAppetite,
-        removeFromUserAppetite,
-        fetchUserAppetite,
-    } = useContext(GlobalContext);
+    const [categories, setCategories] = useState([]);
+    const [showFilter, setShowFilter] = useState(false);
+    const [showClearOverlay, setShowClearOverlay] = useState(false);
+    const [selectedFilterOption, setSelectedFilterOption] = useState(
+        filterMap.POPULAR
+    );
+    const { userAppetite, fetchUserAppetite, clearUserAppetite } = useContext(
+        GlobalContext
+    );
 
-    useLayoutEffect(() => {
-        navigation.setOptions({
-            headerRight: () => (
-                <Button
-                    onPress={() => {
-                        setShowSearch(!showSearch);
-                    }}
-                    icon={
-                        <Icon
-                            name="md-search"
-                            color={colorScheme === 'light' ? 'black' : 'white'}
-                            type={'ionicon'}
-                            size={28}
-                        />
-                    }
-                    buttonStyle={styles.searchIcon}
-                />
-            ),
-        });
-    }, [navigation, showSearch]);
+    const getSectionedCategories = (filter, searchResults = []) => {
+        if (filter === filterMap.POPULAR) {
+            return [
+                {
+                    title: filter,
+                    data: Categories.filter(
+                        (c) => c.popular && !c.supported_countries.length
+                    ),
+                },
+                {
+                    title: 'All Categories',
+                    data: Categories.filter(
+                        (c) => !c.popular && !c.supported_countries.length
+                    ),
+                },
+            ];
+        }
+
+        if (filter === filterMap.ALPHABETICAL) {
+            return [
+                {
+                    title: filter,
+                    data: Categories.filter(
+                        (c) => !c.supported_countries.length
+                    ).sort((a, b) =>
+                        a.name > b.name ? 1 : a.name < b.name ? -1 : 0
+                    ),
+                },
+            ];
+        }
+
+        if (filter === filterMap.SELECTED) {
+            return [
+                {
+                    title: filter,
+                    data: Categories.filter(({ id }) =>
+                        userAppetite.includes(id)
+                    ),
+                },
+            ];
+        }
+
+        if (filter === filterMap.UNSELECTED) {
+            return [
+                {
+                    title: filter,
+                    data: Categories.filter(
+                        ({ id, supported_countries }) =>
+                            !userAppetite.includes(id) &&
+                            !supported_countries.length
+                    ),
+                },
+            ];
+        }
+
+        if (filter === filterMap.SEARCH_RESULTS) {
+            return [
+                {
+                    title: filter,
+                    data: searchResults.filter((item) =>
+                        selectedFilterOption === filterMap.POPULAR ||
+                        selectedFilterOption === filterMap.ALPHABETICAL
+                            ? !item.supported_countries.length
+                            : selectedFilterOption === filterMap.SELECTED
+                            ? userAppetite.includes(item.id)
+                            : !userAppetite.includes(item.id)
+                    ),
+                },
+            ];
+        }
+    };
 
     useEffect(() => {
+        // initialize fuse
+        const searchableCategories = Categories.filter(
+            ({ supported_countries }) => !supported_countries.length
+        );
+
+        fuse = new Fuse(searchableCategories, searchOptions);
+
+        setCategories(getSectionedCategories(selectedFilterOption));
         fetchUserAppetite();
     }, []);
-
-    const renderCategory = (item, isInAppetite) => {
-        return (
-            <CategoryCard
-                title={item.title}
-                image={item.image}
-                isInAppetite={isInAppetite}
-                onActionButtonPress={() =>
-                    isInAppetite
-                        ? removeFromUserAppetite(item.id)
-                        : addToUserAppetite(item.id)
-                }
-            />
-        );
-    };
 
     const updateSearch = (text) => {
         setSearchTerm(text);
         if (text) {
-            setCategories(fuse.search(text).map((c) => c.item));
+            setCategories(
+                getSectionedCategories(
+                    filterMap.SEARCH_RESULTS,
+                    fuse.search(text).map((c) => c.item)
+                )
+            );
         } else {
-            setCategories(searchableCategories);
+            setCategories(getSectionedCategories(selectedFilterOption));
         }
     };
 
-    const isInAppetite = (item) => {
-        return userAppetite.filter((a) => a === item.id).length;
+    const handleFilterChange = (option) => {
+        setCategories(getSectionedCategories(option));
+        setSelectedFilterOption(option);
     };
 
     return (
-        <View style={styles.container}>
-            <View style={styles.title}>
-                {showSearch && (
+        <SafeAreaView style={styles.container}>
+            <View style={styles.container}>
+                <View style={styles.optionsContainer}>
                     <SearchBar
-                        placeholder="Search categories or restaurants..."
+                        placeholder="Search categories..."
                         onChangeText={updateSearch}
                         value={searchTerm}
-                        platform={'ios'}
-                        autoFocus={true}
-                        onCancel={() => setShowSearch(false)}
+                        platform={'default'}
+                        autoFocus={false}
+                        containerStyle={styles.searchBarContainer}
+                        showCancel={false}
+                        lightTheme={colorScheme === 'light'}
+                        round={true}
+                        inputContainerStyle={styles.searchBarInputContainer}
+                        placeholderTextColor={'#737373'}
+                        inputStyle={styles.searchInput}
                     />
-                )}
-                <FlatList
-                    data={categories.map((c) => ({
-                        id: c.id,
-                        title: c.name,
-                        image: c.image,
-                    }))}
-                    renderItem={({ item }) =>
-                        renderCategory(item, isInAppetite(item))
+                    <Button
+                        icon={
+                            <Icon
+                                type={'font-awesome-5'}
+                                name="filter"
+                                size={22}
+                                color={
+                                    colorScheme === 'light' ? 'black' : 'white'
+                                }
+                            />
+                        }
+                        buttonStyle={styles.optionsButton}
+                        onPress={() => setShowFilter(true)}
+                    />
+                    <ClearAppetiteButton
+                        onButtonPress={() => setShowClearOverlay(true)}
+                    />
+                </View>
+                <CategoryList categories={categories} />
+                <ExploreFilter
+                    visible={showFilter}
+                    handleClose={() => setShowFilter(false)}
+                    selectedOption={selectedFilterOption}
+                    handleOptionPress={(option) => handleFilterChange(option)}
+                />
+                <OverlayModal
+                    title={'Confirmation'}
+                    onBackdropPress={() => setShowClearOverlay(false)}
+                    onCancelPress={() => setShowClearOverlay(false)}
+                    onConfirmPress={() => {
+                        clearUserAppetite();
+                        setShowClearOverlay(false);
+                    }}
+                    description={
+                        'This will clear all categories from your appetite list. Are you sure?'
                     }
-                    keyExtractor={(item) => item.id}
-                    numColumns={1}
-                    horizontal={false}
-                    style={{ width: '100%' }}
+                    showOverlay={showClearOverlay}
                 />
             </View>
-        </View>
+        </SafeAreaView>
     );
 }
 
@@ -127,19 +204,39 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
     },
-    title: {
-        fontSize: 20,
-        fontWeight: 'bold',
+    optionsContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        maxWidth: '100%',
+        alignItems: 'center',
+        alignSelf: 'center',
+        justifyContent: 'space-between',
+        height: 64,
     },
-    separator: {
-        marginVertical: 30,
-        height: 1,
-        width: '80%',
-    },
-    searchIcon: {
-        backgroundColor: '#fff',
+    optionsButton: {
+        backgroundColor: '#f0f0f1',
+        borderRadius: 13,
+        height: 45,
+        width: 40,
+        borderColor: '#f0f0f1',
+        borderWidth: 1,
+        marginLeft: 6,
         marginRight: 6,
+    },
+    searchBarContainer: {
+        width: '75%',
+        marginRight: -6,
+        backgroundColor: 'transparent',
+        borderTopWidth: 0,
+        borderBottomWidth: 0,
+    },
+    searchBarInputContainer: {
+        backgroundColor: '#f0f0f1',
+        color: 'black',
+    },
+    searchInput: {
+        color: 'black',
     },
 });

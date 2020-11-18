@@ -1,28 +1,48 @@
-import React, { useContext } from 'react';
-import { Image, StyleSheet } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { StyleSheet } from 'react-native';
 
-import EditScreenInfo from '../components/EditScreenInfo';
-import { Text, View } from '../components/Themed';
+import Categories from '../data/categories';
+import { View } from '../components/Themed';
 import GlobalContext from '../utils/context';
+import CategoryList from '../components/CategoryList';
+import OverlayModal from '../components/OverlayModal';
 
 export default function AppetiteScreen() {
-    const {
-        userAppetite,
-        addToUserAppetite,
-        removeFromUserAppetite,
-    } = useContext(GlobalContext);
+    const { userAppetite, clearUserAppetite } = useContext(GlobalContext);
+    const [displayAppetite, setDisplayAppetite] = useState([]);
+    const [showClearOverlay, setShowClearOverlay] = useState(false);
+
+    useEffect(() => {
+        setDisplayAppetite([
+            {
+                title: "What You're Feeling",
+                data: Categories.filter((item) =>
+                    userAppetite.includes(item.id)
+                ),
+            },
+        ]);
+    }, [userAppetite]);
 
     return (
         <View style={styles.container}>
-            <View
-                style={styles.separator}
-                lightColor="#eee"
-                darkColor="rgba(255,255,255,0.1)"
+            <CategoryList
+                categories={displayAppetite}
+                showClearAllButton
+                onClearAllButtonPress={() => setShowClearOverlay(true)}
             />
-            <Text>User Appetite:</Text>
-            {userAppetite.map((a) => (
-                <Text key={a}>{a}</Text>
-            ))}
+            <OverlayModal
+                title={'Confirmation'}
+                onBackdropPress={() => setShowClearOverlay(false)}
+                onCancelPress={() => setShowClearOverlay(false)}
+                onConfirmPress={() => {
+                    clearUserAppetite();
+                    setShowClearOverlay(false);
+                }}
+                description={
+                    'This will clear all categories from your appetite list. Are you sure?'
+                }
+                showOverlay={showClearOverlay}
+            />
         </View>
     );
 }
