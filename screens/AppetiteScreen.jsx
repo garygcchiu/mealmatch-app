@@ -4,6 +4,7 @@ import { Image, StyleSheet } from 'react-native';
 import Categories from '../data/categories';
 import { Text, View } from '../components/Themed';
 import GlobalContext from '../utils/context';
+import CategoryList from '../components/CategoryList';
 
 export default function AppetiteScreen() {
     const {
@@ -14,22 +15,19 @@ export default function AppetiteScreen() {
     const [displayAppetite, setDisplayAppetite] = useState([]);
 
     useEffect(() => {
-        setDisplayAppetite(
-            Categories.filter((item) => userAppetite.includes(item.id))
-        );
+        setDisplayAppetite([
+            {
+                title: "What You're Feeling",
+                data: Categories.filter((item) =>
+                    userAppetite.includes(item.id)
+                ),
+            },
+        ]);
     }, []);
 
     return (
         <View style={styles.container}>
-            <View
-                style={styles.separator}
-                lightColor="#eee"
-                darkColor="rgba(255,255,255,0.1)"
-            />
-            <Text>User Appetite:</Text>
-            {displayAppetite.map((a) => (
-                <Text key={a.id}>{a.name}</Text>
-            ))}
+            <CategoryList categories={displayAppetite} />
         </View>
     );
 }

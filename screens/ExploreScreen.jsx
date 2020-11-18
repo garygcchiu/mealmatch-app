@@ -5,8 +5,8 @@ import { SearchBar, Button, Icon } from 'react-native-elements';
 
 import useColorScheme from '../hooks/useColorScheme';
 import Categories from '../data/categories';
-import CategoryCard from '../components/CategoryCard';
-import { View, Text } from '../components/Themed';
+import CategoryList from '../components/CategoryList';
+import { View } from '../components/Themed';
 import GlobalContext from '../utils/context';
 import ExploreFilter from '../components/ExploreFilter';
 import { filterMap } from '../data/filterOptions';
@@ -29,12 +29,7 @@ export default function ExploreScreen({ navigation }) {
     const [selectedFilterOption, setSelectedFilterOption] = useState(
         filterMap.POPULAR
     );
-    const {
-        userAppetite,
-        addToUserAppetite,
-        removeFromUserAppetite,
-        fetchUserAppetite,
-    } = useContext(GlobalContext);
+    const { userAppetite, fetchUserAppetite } = useContext(GlobalContext);
 
     const getSectionedCategories = (filter, searchResults = []) => {
         if (filter === filterMap.POPULAR) {
@@ -120,25 +115,6 @@ export default function ExploreScreen({ navigation }) {
         fetchUserAppetite();
     }, []);
 
-    const renderCategory = (item, isInAppetite) => {
-        return (
-            <CategoryCard
-                title={item.name}
-                image={item.image}
-                isInAppetite={isInAppetite}
-                onActionButtonPress={() =>
-                    isInAppetite
-                        ? removeFromUserAppetite(item.id)
-                        : addToUserAppetite(item.id)
-                }
-            />
-        );
-    };
-
-    const renderSectionHeader = (title) => {
-        return <Text style={styles.sectionHeader}>{title}</Text>;
-    };
-
     const updateSearch = (text) => {
         setSearchTerm(text);
         if (text) {
@@ -153,10 +129,6 @@ export default function ExploreScreen({ navigation }) {
         }
     };
 
-    const isInAppetite = (item) => {
-        return userAppetite.filter((a) => a === item.id).length;
-    };
-
     const handleFilterChange = (option) => {
         setCategories(getSectionedCategories(option));
         setSelectedFilterOption(option);
@@ -165,78 +137,56 @@ export default function ExploreScreen({ navigation }) {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.container}>
-                <View style={styles.title}>
-                    <View style={styles.optionsContainer}>
-                        <SearchBar
-                            placeholder="Search categories..."
-                            onChangeText={updateSearch}
-                            value={searchTerm}
-                            platform={'default'}
-                            autoFocus={false}
-                            onCancel={() => {}}
-                            containerStyle={styles.searchBarContainer}
-                            showCancel={false}
-                            cancelButtonTitle={''}
-                            lightTheme={colorScheme === 'light'}
-                            round={true}
-                            inputContainerStyle={styles.searchBarInputContainer}
-                            placeholderTextColor={'#737373'}
-                            inputStyle={{ color: 'black' }}
-                        />
-                        <Button
-                            icon={
-                                <Icon
-                                    type={'font-awesome-5'}
-                                    name="filter"
-                                    size={22}
-                                    color={
-                                        colorScheme === 'light'
-                                            ? 'black'
-                                            : 'white'
-                                    }
-                                />
-                            }
-                            buttonStyle={styles.optionsButton}
-                            onPress={() => setShowFilter(true)}
-                        />
-                        <Button
-                            icon={
-                                <Icon
-                                    type={'material-community'}
-                                    name="file-document-box-remove-outline"
-                                    size={22}
-                                    color={
-                                        colorScheme === 'light'
-                                            ? 'black'
-                                            : 'white'
-                                    }
-                                />
-                            }
-                            buttonStyle={styles.optionsButton}
-                        />
-                    </View>
-                    <SectionList
-                        renderItem={({ item }) =>
-                            renderCategory(item, isInAppetite(item))
-                        }
-                        renderSectionHeader={({ section: { title } }) =>
-                            renderSectionHeader(title)
-                        }
-                        keyExtractor={(item) => item.id}
-                        numColumns={1}
-                        horizontal={false}
-                        style={{ width: '100%' }}
-                        sections={categories}
+                <View style={styles.optionsContainer}>
+                    <SearchBar
+                        placeholder="Search categories..."
+                        onChangeText={updateSearch}
+                        value={searchTerm}
+                        platform={'default'}
+                        autoFocus={false}
+                        containerStyle={styles.searchBarContainer}
+                        showCancel={false}
+                        lightTheme={colorScheme === 'light'}
+                        round={true}
+                        inputContainerStyle={styles.searchBarInputContainer}
+                        placeholderTextColor={'#737373'}
+                        inputStyle={styles.searchInput}
                     />
-                    <ExploreFilter
-                        visible={showFilter}
-                        handleClose={() => setShowFilter(false)}
-                        selectedOption={selectedFilterOption}
-                        handleOptionPress={(option) =>
-                            handleFilterChange(option)
+                    <Button
+                        icon={
+                            <Icon
+                                type={'font-awesome-5'}
+                                name="filter"
+                                size={22}
+                                color={
+                                    colorScheme === 'light' ? 'black' : 'white'
+                                }
+                            />
                         }
+                        buttonStyle={styles.optionsButton}
+                        onPress={() => setShowFilter(true)}
+                    />
+                    <Button
+                        icon={
+                            <Icon
+                                type={'material-community'}
+                                name="file-document-box-remove-outline"
+                                size={22}
+                                color={
+                                    colorScheme === 'light' ? 'black' : 'white'
+                                }
+                            />
+                        }
+                        buttonStyle={styles.optionsButton}
                     />
                 </View>
+                <CategoryList categories={categories} />
+                <ExploreFilter
+                    visible={showFilter}
+                    handleClose={() => setShowFilter(false)}
+                    selectedOption={selectedFilterOption}
+                    handleOptionPress={(option) => handleFilterChange(option)}
+                />
             </View>
         </SafeAreaView>
     );
@@ -246,17 +196,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
     },
     title: {
         fontSize: 20,
         fontWeight: 'bold',
-    },
-    separator: {
-        height: 1,
-        width: '95%',
-        alignSelf: 'center',
-        marginBottom: 5,
     },
     optionsContainer: {
         display: 'flex',
@@ -288,16 +232,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#f0f0f1',
         color: 'black',
     },
-    searchIcon: {
-        backgroundColor: '#fff',
-        marginRight: 6,
-    },
-    sectionHeader: {
-        fontSize: 24,
-        paddingLeft: 12,
-        paddingRight: 12,
-        backgroundColor: 'white',
-        height: 50,
-        paddingTop: 16,
+    searchInput: {
+        color: 'black',
     },
 });

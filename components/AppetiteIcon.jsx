@@ -2,8 +2,7 @@ import * as React from 'react';
 import Svg, { Path, Rect } from 'react-native-svg';
 
 function SvgComponent(props) {
-    const { focused, color } = props;
-    console.log('props = ', props);
+    const { color } = props;
 
     return (
         <Svg
