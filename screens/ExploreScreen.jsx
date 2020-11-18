@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { StyleSheet, SectionList } from 'react-native';
+import { StyleSheet, SectionList, SafeAreaView } from 'react-native';
 import Fuse from 'fuse.js';
 import { SearchBar, Button, Icon } from 'react-native-elements';
 
@@ -163,74 +163,82 @@ export default function ExploreScreen({ navigation }) {
     };
 
     return (
-        <View style={styles.container}>
-            <View style={styles.title}>
-                <View style={styles.optionsContainer}>
-                    <SearchBar
-                        placeholder="Search categories..."
-                        onChangeText={updateSearch}
-                        value={searchTerm}
-                        platform={'default'}
-                        autoFocus={false}
-                        onCancel={() => {}}
-                        containerStyle={styles.searchBarContainer}
-                        showCancel={false}
-                        cancelButtonTitle={''}
-                        lightTheme={colorScheme === 'light'}
-                        round={true}
-                        inputContainerStyle={styles.searchBarInputContainer}
-                        placeholderTextColor={'#737373'}
-                        inputStyle={{ color: 'black' }}
-                    />
-                    <Button
-                        icon={
-                            <Icon
-                                type={'font-awesome-5'}
-                                name="filter"
-                                size={22}
-                                color={
-                                    colorScheme === 'light' ? 'black' : 'white'
-                                }
-                            />
+        <SafeAreaView style={styles.container}>
+            <View style={styles.container}>
+                <View style={styles.title}>
+                    <View style={styles.optionsContainer}>
+                        <SearchBar
+                            placeholder="Search categories..."
+                            onChangeText={updateSearch}
+                            value={searchTerm}
+                            platform={'default'}
+                            autoFocus={false}
+                            onCancel={() => {}}
+                            containerStyle={styles.searchBarContainer}
+                            showCancel={false}
+                            cancelButtonTitle={''}
+                            lightTheme={colorScheme === 'light'}
+                            round={true}
+                            inputContainerStyle={styles.searchBarInputContainer}
+                            placeholderTextColor={'#737373'}
+                            inputStyle={{ color: 'black' }}
+                        />
+                        <Button
+                            icon={
+                                <Icon
+                                    type={'font-awesome-5'}
+                                    name="filter"
+                                    size={22}
+                                    color={
+                                        colorScheme === 'light'
+                                            ? 'black'
+                                            : 'white'
+                                    }
+                                />
+                            }
+                            buttonStyle={styles.optionsButton}
+                            onPress={() => setShowFilter(true)}
+                        />
+                        <Button
+                            icon={
+                                <Icon
+                                    type={'material-community'}
+                                    name="file-document-box-remove-outline"
+                                    size={22}
+                                    color={
+                                        colorScheme === 'light'
+                                            ? 'black'
+                                            : 'white'
+                                    }
+                                />
+                            }
+                            buttonStyle={styles.optionsButton}
+                        />
+                    </View>
+                    <SectionList
+                        renderItem={({ item }) =>
+                            renderCategory(item, isInAppetite(item))
                         }
-                        buttonStyle={styles.optionsButton}
-                        onPress={() => setShowFilter(true)}
-                    />
-                    <Button
-                        icon={
-                            <Icon
-                                type={'material-community'}
-                                name="file-document-box-remove-outline"
-                                size={22}
-                                color={
-                                    colorScheme === 'light' ? 'black' : 'white'
-                                }
-                            />
+                        renderSectionHeader={({ section: { title } }) =>
+                            renderSectionHeader(title)
                         }
-                        buttonStyle={styles.optionsButton}
+                        keyExtractor={(item) => item.id}
+                        numColumns={1}
+                        horizontal={false}
+                        style={{ width: '100%' }}
+                        sections={categories}
+                    />
+                    <ExploreFilter
+                        visible={showFilter}
+                        handleClose={() => setShowFilter(false)}
+                        selectedOption={selectedFilterOption}
+                        handleOptionPress={(option) =>
+                            handleFilterChange(option)
+                        }
                     />
                 </View>
-                <SectionList
-                    renderItem={({ item }) =>
-                        renderCategory(item, isInAppetite(item))
-                    }
-                    renderSectionHeader={({ section: { title } }) =>
-                        renderSectionHeader(title)
-                    }
-                    keyExtractor={(item) => item.id}
-                    numColumns={1}
-                    horizontal={false}
-                    style={{ width: '100%' }}
-                    sections={categories}
-                />
-                <ExploreFilter
-                    visible={showFilter}
-                    handleClose={() => setShowFilter(false)}
-                    selectedOption={selectedFilterOption}
-                    handleOptionPress={(option) => handleFilterChange(option)}
-                />
             </View>
-        </View>
+        </SafeAreaView>
     );
 }
 
