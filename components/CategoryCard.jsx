@@ -37,7 +37,11 @@ export default function CategoryCard({
     return (
         <View style={styles.container}>
             <TouchableOpacity activeOpacity={0.5}>
-                <ImageBackground source={image} style={styles.imageBackground}>
+                <ImageBackground
+                    source={image}
+                    style={styles.imageBackgroundContainer}
+                    imageStyle={styles.imageBackground}
+                >
                     <Text style={styles.text}>{title}</Text>
                     <Icon
                         type={'ionicon'}
@@ -74,13 +78,16 @@ const styles = StyleSheet.create({
         width: Dimensions.get('window').width,
         marginTop: 12,
     },
-    imageBackground: {
+    imageBackgroundContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         height: 60,
         width: cardLength,
         alignSelf: 'center',
+    },
+    imageBackground: {
+        borderRadius: 14,
     },
     text: {
         fontSize: 20,
