@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Image, StyleSheet } from 'react-native';
 
-import EditScreenInfo from '../components/EditScreenInfo';
+import Categories from '../data/categories';
 import { Text, View } from '../components/Themed';
 import GlobalContext from '../utils/context';
 
@@ -11,6 +11,13 @@ export default function AppetiteScreen() {
         addToUserAppetite,
         removeFromUserAppetite,
     } = useContext(GlobalContext);
+    const [displayAppetite, setDisplayAppetite] = useState([]);
+
+    useEffect(() => {
+        setDisplayAppetite(
+            Categories.filter((item) => userAppetite.includes(item.id))
+        );
+    }, []);
 
     return (
         <View style={styles.container}>
@@ -20,8 +27,8 @@ export default function AppetiteScreen() {
                 darkColor="rgba(255,255,255,0.1)"
             />
             <Text>User Appetite:</Text>
-            {userAppetite.map((a) => (
-                <Text key={a}>{a}</Text>
+            {displayAppetite.map((a) => (
+                <Text key={a.id}>{a.name}</Text>
             ))}
         </View>
     );
