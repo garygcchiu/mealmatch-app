@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
         borderRadius: 25,
     },
     separator: {
-        marginVertical: 10,
+        marginVertical: 8,
         height: 1,
         width: '80%',
     },
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#030303',
         paddingHorizontal: 20,
-        marginTop: 8,
+        marginTop: 12,
     },
     overlayButtons: {
         marginTop: 28,
