@@ -32,9 +32,7 @@ class State extends React.Component {
                 this.setState({ userAppetite });
             },
             setSkipChooseUsername: () => {
-                this.setState({ skipChooseUsername: true }, () =>
-                    console.log('skip choose username set to true!')
-                );
+                this.setState({ skipChooseUsername: true });
             },
         };
     }
