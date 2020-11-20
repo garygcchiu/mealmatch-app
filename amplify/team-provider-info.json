@@ -1,19 +1,19 @@
 {
   "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-mealmatch-dev-205045-authRole",
-      "UnauthRoleArn": "arn:aws:iam::268394913050:role/amplify-mealmatch-dev-205045-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::268394913050:role/amplify-mealmatch-dev-205045-authRole",
+      "AuthRoleName": "amplify-mealmatchio-dev-20744-authRole",
+      "UnauthRoleArn": "arn:aws:iam::268394913050:role/amplify-mealmatchio-dev-20744-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::268394913050:role/amplify-mealmatchio-dev-20744-authRole",
       "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-mealmatch-dev-205045-deployment",
-      "UnauthRoleName": "amplify-mealmatch-dev-205045-unauthRole",
-      "StackName": "amplify-mealmatch-dev-205045",
-      "StackId": "arn:aws:cloudformation:us-east-1:268394913050:stack/amplify-mealmatch-dev-205045/d3ae8c10-2164-11eb-945b-0a479dbf9bdf",
-      "AmplifyAppId": "d2zi3o2hf9xa6k"
+      "DeploymentBucketName": "amplify-mealmatchio-dev-20744-deployment",
+      "UnauthRoleName": "amplify-mealmatchio-dev-20744-unauthRole",
+      "StackName": "amplify-mealmatchio-dev-20744",
+      "StackId": "arn:aws:cloudformation:us-east-1:268394913050:stack/amplify-mealmatchio-dev-20744/ee5ba9b0-2a35-11eb-bd5d-0e0e50fbc697",
+      "AmplifyAppId": "dvi5vah5cuqqd"
     },
     "categories": {
       "auth": {
-        "mealmatchaba2708a": {
+        "mealmatchio71ecf428": {
           "hostedUIProviderCreds": "[{\"ProviderName\":\"Facebook\",\"client_id\":\"3715805221803245\",\"client_secret\":\"b629fcbbd636f3629457346cdeb5d7d6\"},{\"ProviderName\":\"Google\",\"client_id\":\"584861258674-0shblks0rg9e3q1h3eev5hd65n9lmm5n.apps.googleusercontent.com\",\"client_secret\":\"grtdtdkwoMHPazehzAK1EvhD\"}]"
         }
       }
