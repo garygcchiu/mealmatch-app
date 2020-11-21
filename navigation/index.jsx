@@ -4,10 +4,9 @@ import {
     DarkTheme,
 } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { ColorSchemeName } from 'react-native';
 import { withOAuth } from 'aws-amplify-react-native';
-import { Icon } from 'react-native-elements';
 
 import NotFoundScreen from '../screens/NotFoundScreen';
 import BottomTabNavigator from './BottomTabNavigator';
@@ -37,20 +36,10 @@ const AuthRootNavigation = withOAuth(RootNavigator);
 
 function RootNavigator({ oAuthUser }) {
     const isLoggedIn = !!oAuthUser;
-    console.log('is logged in ? ', isLoggedIn);
-
     const { skipChooseUsername } = useContext(GlobalContext);
-
-    console.log(
-        'custom:display_name  ? ',
-        oAuthUser?.attributes['custom:display_username']?.length
-    );
-
     const shouldChooseUsername =
         !skipChooseUsername &&
         !oAuthUser?.attributes['custom:display_username']?.length;
-
-    console.log('should choose username ? ', shouldChooseUsername);
 
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
