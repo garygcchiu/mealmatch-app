@@ -7,3 +7,11 @@ export async function getAppetite() {
 export async function editAppetite(appetite) {
     return standardPost('/users/appetite', appetite);
 }
+
+export async function editUserInfo(displayUsername) {
+    return standardPost('/users/info', { display_username: displayUsername });
+}
+
+export async function getInitUserInfo() {
+    return standardGet('/users/info');
+}

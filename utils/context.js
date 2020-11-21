@@ -1,13 +1,14 @@
 import React, { createContext } from 'react';
 import * as userApi from '../api/user';
+import { withOAuth } from 'aws-amplify-react-native';
 
 const GlobalContext = createContext(undefined);
 
-export class GlobalProvider extends React.Component {
+class State extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            userId: null,
+            skipChooseUsername: false,
             userAppetite: [],
             addToUserAppetite: async (id) => {
                 const addRes = await userApi.editAppetite([
@@ -30,7 +31,20 @@ export class GlobalProvider extends React.Component {
                 const userAppetite = await userApi.getAppetite();
                 this.setState({ userAppetite });
             },
+            setSkipChooseUsername: () => {
+                this.setState({ skipChooseUsername: true });
+            },
         };
+    }
+
+    async componentDidUpdate(prevProps, prevState, snapshot) {
+        if (!prevProps.oAuthUser && this.props.oAuthUser) {
+            //const userInit = await userApi.getInitUserInfo();
+            console.log('didnt have oauthuser, now we do!!!!');
+            this.setState({
+                userInitLoading: false,
+            });
+        }
     }
 
     render() {
@@ -41,6 +55,8 @@ export class GlobalProvider extends React.Component {
         );
     }
 }
+
+export const GlobalProvider = withOAuth(State);
 
 export const GlobalConsumer = GlobalContext.Consumer;
 

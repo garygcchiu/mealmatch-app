@@ -12,18 +12,18 @@ import NotFoundScreen from '../screens/NotFoundScreen';
 import BottomTabNavigator from './BottomTabNavigator';
 import LinkingConfiguration from './LinkingConfiguration';
 import AuthScreen from '../screens/AuthScreen';
+import ChooseUsernameScreen from '../screens/ChooseUsernameScreen';
+import GlobalContext from '../utils/context';
 
 // If you are not familiar with React Navigation, we recommend going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
-function Navigation(props) {
-    const { colorScheme, oAuthUser } = props;
-
+function Navigation({ colorScheme }) {
     return (
         <NavigationContainer
             linking={LinkingConfiguration}
             theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
         >
-            <RootNavigator isLoggedIn={!!oAuthUser} />
+            <AuthRootNavigation />
         </NavigationContainer>
     );
 }
@@ -32,11 +32,24 @@ function Navigation(props) {
 // Read more here: https://reactnavigation.org/docs/modal
 const Stack = createStackNavigator();
 
-function RootNavigator({ isLoggedIn }) {
+const AuthRootNavigation = withOAuth(RootNavigator);
+
+function RootNavigator({ oAuthUser }) {
+    const isLoggedIn = !!oAuthUser;
+    const { skipChooseUsername } = useContext(GlobalContext);
+    const shouldChooseUsername =
+        !skipChooseUsername &&
+        !oAuthUser?.attributes['custom:display_username']?.length;
+
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-            {isLoggedIn ? (
+            {isLoggedIn && !shouldChooseUsername ? (
                 <Stack.Screen name="Root" component={BottomTabNavigator} />
+            ) : isLoggedIn && shouldChooseUsername ? (
+                <Stack.Screen
+                    name="ChooseUsername"
+                    component={ChooseUsernameScreen}
+                />
             ) : (
                 <Stack.Screen name="Login" component={AuthScreen} />
             )}
@@ -49,4 +62,4 @@ function RootNavigator({ isLoggedIn }) {
     );
 }
 
-export default withOAuth(Navigation);
+export default Navigation;

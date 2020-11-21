@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { withOAuth } from 'aws-amplify-react-native';
 import { Auth } from 'aws-amplify';
@@ -22,7 +22,10 @@ const buttons = ['Login', 'Register'];
 function AuthScreen(props) {
     const [mode, setMode] = useState(AUTH_MODE.LOGIN);
     const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [firstname, setFirstname] = useState('');
+    const [lastname, setLastname] = useState('');
     const [verificationCode, setVerificationCode] = useState('');
     const [showVerification, setShowVerification] = useState(false);
     const [showSendVerificationAgain, setShowSendVerificationAgain] = useState(
@@ -31,32 +34,92 @@ function AuthScreen(props) {
     const [loginLoading, setLoginLoading] = useState(false);
     const [verificationLoading, setVerificationLoading] = useState(false);
     const [usernameError, setUsernameError] = useState('');
+    const [firstnameError, setFirstnameError] = useState('');
+    const [lastnameError, setLastnameError] = useState('');
+    const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const [verificationError, setVerificationError] = useState('');
+    const componentIsMounted = useRef(true);
 
     const { googleSignIn, facebookSignIn } = props;
 
-    const handleSignUp = async (email, password) => {
+    useEffect(() => {
+        // keep track of component's mounted state: used so delaySendVerificationAgain doesn't update state if unmounted
+        return () => {
+            componentIsMounted.current = false;
+        };
+    }, []);
+
+    const clearErrors = () => {
         setUsernameError('');
+        setFirstnameError('');
+        setLastnameError('');
+        setEmailError('');
         setPasswordError('');
         setShowSendVerificationAgain(false);
         setVerificationError('');
         setVerificationCode('');
+    };
+
+    const handleSignUp = async () => {
+        clearErrors();
+
+        if (!username) {
+            setUsernameError(
+                'Username cannot be empty! It is how you search for friends in the app.'
+            );
+            return;
+        }
+        if (username.length < 4) {
+            setUsernameError('Username must be more than 4 characters long.');
+            return;
+        }
+        if (!firstname) {
+            setFirstnameError('Firstname cannot be empty!');
+            return;
+        }
+        if (!lastname) {
+            setLastnameError('Lastname cannot be empty!');
+            return;
+        }
+        if (!email) {
+            setEmailError(
+                'Email cannot be empty! It is how you recover your account if you forget your password.'
+            );
+            return;
+        }
+        if (!password) {
+            setPasswordError('Password cannot be empty!');
+            return;
+        }
 
         try {
             await Auth.signUp({
-                email,
+                username,
                 password,
-                username: email,
+                attributes: {
+                    email,
+                    given_name: firstname,
+                    family_name: lastname,
+                    'custom:display_username': username,
+                },
             });
             setShowVerification(true);
             delaySendVerificationAgain();
         } catch (err) {
             console.log('error signing up:', err);
-            if (err.message.toLowerCase().includes('username')) {
-                setUsernameError(err.message.split(':').pop().trim());
+            const outputErrorMessage = err.message.split(':').pop().trim();
+
+            if (err.code === 'UsernameExistsException') {
+                setUsernameError(err.message);
+            } else if (err.message.toLowerCase().includes('username')) {
+                setUsernameError(outputErrorMessage);
             } else if (err.message.toLowerCase().includes('password')) {
-                setPasswordError(err.message.split(':').pop().trim());
+                setPasswordError(outputErrorMessage);
+            } else if (err.message.toLowerCase().includes('given_name')) {
+                setFirstnameError(outputErrorMessage);
+            } else if (err.message.toLowerCase().includes('family_name')) {
+                setLastnameError(outputErrorMessage);
             } else {
                 setPasswordError('Unexpected error, please try again later.');
             }
@@ -65,17 +128,19 @@ function AuthScreen(props) {
 
     const delaySendVerificationAgain = () => {
         setTimeout(() => {
-            setShowSendVerificationAgain(true);
-        }, 10000);
+            if (componentIsMounted.current) {
+                setShowSendVerificationAgain(true);
+            }
+        }, 15000);
     };
 
-    const handleSignIn = async (email, password, animateLoading = true) => {
+    const handleSignIn = async (animateLoading = true) => {
         if (animateLoading) {
             setLoginLoading(true);
         }
 
         try {
-            await Auth.signIn(email, password);
+            await Auth.signIn(username, password);
         } catch (err) {
             if (err.message.toLowerCase().includes('user')) {
                 setUsernameError(err.message);
@@ -92,11 +157,11 @@ function AuthScreen(props) {
         setVerificationLoading(true);
         try {
             const confirmation = await Auth.confirmSignUp(
-                email,
+                username,
                 verificationCode
             );
             if (confirmation === 'SUCCESS') {
-                await handleSignIn(email, password);
+                await handleSignIn(username, password);
             }
         } catch (err) {
             setVerificationError(err.message);
@@ -119,11 +184,42 @@ function AuthScreen(props) {
                     innerBorderStyle={styles.buttonGroupInnerBorder}
                 />
                 <Input
-                    placeholder={'Email Address'}
-                    value={email}
-                    onChangeText={(value) => setEmail(value)}
+                    placeholder={'Username'}
+                    value={username}
+                    onChangeText={(value) => setUsername(value)}
                     errorMessage={usernameError}
+                    autoCapitalize={'none'}
+                    autoCorrect={false}
                 />
+                {mode === AUTH_MODE.SIGN_UP && (
+                    <>
+                        <Input
+                            placeholder={'First Name'}
+                            value={firstname}
+                            onChangeText={(value) => setFirstname(value)}
+                            errorMessage={firstnameError}
+                            autoCapitalize={'words'}
+                            autoCorrect={false}
+                        />
+                        <Input
+                            placeholder={'Last Name'}
+                            value={lastname}
+                            onChangeText={(value) => setLastname(value)}
+                            errorMessage={lastnameError}
+                            autoCapitalize={'words'}
+                            autoCorrect={false}
+                        />
+                        <Input
+                            placeholder={'Email Address'}
+                            value={email}
+                            onChangeText={(value) => setEmail(value)}
+                            errorMessage={emailError}
+                            autoCapitalize={'none'}
+                            autoCorrect={false}
+                            keyboardType={'email-address'}
+                        />
+                    </>
+                )}
                 <Input
                     placeholder={'Password'}
                     secureTextEntry={true}
@@ -165,8 +261,8 @@ function AuthScreen(props) {
                     titleStyle={styles.loginButtonText}
                     onPress={() =>
                         mode === AUTH_MODE.LOGIN
-                            ? handleSignIn(email, password)
-                            : handleSignUp(email, password)
+                            ? handleSignIn()
+                            : handleSignUp()
                     }
                     loading={loginLoading}
                 />

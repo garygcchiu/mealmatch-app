@@ -7,6 +7,7 @@ import {
 import { Text, View } from './Themed';
 import React from 'react';
 import { Icon } from 'react-native-elements';
+import AppetiteToggleButton from './AppetiteToggleButton';
 
 const cardLength = Dimensions.get('window').width - 20;
 
@@ -33,6 +34,7 @@ export default function CategoryCard({
     image,
     isInAppetite = false,
     onActionButtonPress,
+    isLoading,
 }) {
     return (
         <View style={styles.container}>
@@ -43,29 +45,10 @@ export default function CategoryCard({
                     imageStyle={styles.imageBackground}
                 >
                     <Text style={styles.text}>{title}</Text>
-                    <Icon
-                        type={'ionicon'}
-                        name={
-                            isInAppetite
-                                ? 'md-checkmark-circle'
-                                : 'ios-add-circle'
-                        }
-                        color={isInAppetite ? 'green' : 'black'}
-                        size={45}
-                        iconStyle={{
-                            overflow: 'hidden',
-                            marginTop: -5,
-                            marginBottom: -5,
-                        }}
-                        containerStyle={{
-                            backgroundColor: 'white',
-                            borderRadius: 50,
-                            overflow: 'hidden',
-                            position: 'absolute',
-                            right: 10,
-                            bottom: 10,
-                        }}
-                        onPress={onActionButtonPress}
+                    <AppetiteToggleButton
+                        isInAppetite={isInAppetite}
+                        onButtonPress={onActionButtonPress}
+                        isLoading={isLoading}
                     />
                 </ImageBackground>
             </TouchableOpacity>
@@ -80,7 +63,8 @@ const styles = StyleSheet.create({
     },
     imageBackgroundContainer: {
         flex: 1,
-        justifyContent: 'center',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         alignItems: 'center',
         height: 60,
         width: cardLength,
@@ -94,7 +78,7 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         textAlign: 'left',
         color: 'white',
-        alignSelf: 'flex-start',
+        alignSelf: 'center',
         paddingLeft: 10,
     },
 });
