@@ -68,7 +68,7 @@ function ProfileScreen(props) {
         <View style={styles.container}>
             <FlatList
                 data={SETTINGS}
-                keyExtractor={(item) => item}
+                keyExtractor={(item) => item.title}
                 renderItem={renderItem}
                 style={{ width: '100%' }}
             />
