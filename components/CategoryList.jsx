@@ -1,4 +1,4 @@
-import React, { useContext, memo } from 'react';
+import React, { useContext, useState } from 'react';
 import { SectionList, StyleSheet } from 'react-native';
 import { View, Text } from './Themed';
 import CategoryCard from './CategoryCard';
@@ -18,18 +18,28 @@ const CategoryList = ({
         addToUserAppetite,
         removeFromUserAppetite,
     } = useContext(GlobalContext);
+    const [isItemLoading, setIsItemLoading] = useState([]); // itemId: boolean
 
     const renderCategory = (item, isInAppetite) => {
+        const handleActionButtonPress = async (itemId) => {
+            setIsItemLoading([...isItemLoading, itemId]);
+
+            if (isInAppetite) {
+                await removeFromUserAppetite(item.id);
+            } else {
+                await addToUserAppetite(item.id);
+            }
+
+            setIsItemLoading([...isItemLoading.filter((i) => i !== itemId)]);
+        };
+
         return (
             <CategoryCard
                 title={item.name}
                 image={item.image}
                 isInAppetite={isInAppetite}
-                onActionButtonPress={() =>
-                    isInAppetite
-                        ? removeFromUserAppetite(item.id)
-                        : addToUserAppetite(item.id)
-                }
+                onActionButtonPress={() => handleActionButtonPress(item.id)}
+                isLoading={isItemLoading.includes(item.id)}
             />
         );
     };
@@ -87,4 +97,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default memo(CategoryList);
+export default CategoryList;
