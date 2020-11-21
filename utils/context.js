@@ -9,7 +9,9 @@ class State extends React.Component {
         super(props);
         this.state = {
             skipChooseUsername: false,
+            userInitLoading: true,
             userAppetite: [],
+            userFollowing: [],
             addToUserAppetite: async (id) => {
                 const addRes = await userApi.editAppetite([
                     ...this.state.userAppetite,
@@ -24,8 +26,9 @@ class State extends React.Component {
                 this.setState({ userAppetite: removeRes });
             },
             clearUserAppetite: () => {
-                userApi.editAppetite([]);
-                this.setState({ userAppetite: [] });
+                userApi
+                    .editAppetite([])
+                    .then(() => this.setState({ userAppetite: [] }));
             },
             fetchUserAppetite: async () => {
                 const userAppetite = await userApi.getAppetite();
@@ -34,15 +37,28 @@ class State extends React.Component {
             setSkipChooseUsername: () => {
                 this.setState({ skipChooseUsername: true });
             },
+            followUser: async (userId) => {
+                const followRes = await userApi.followUser(userId);
+                this.setState({ userFollowing: followRes.following });
+            },
+            unfollowUser: async (userId) => {
+                const unfollowRes = await userApi.unfollowUser(
+                    userId,
+                    this.state.userFollowing
+                );
+                this.setState({ userFollowing: unfollowRes.following });
+            },
         };
     }
 
     async componentDidUpdate(prevProps, prevState, snapshot) {
         if (!prevProps.oAuthUser && this.props.oAuthUser) {
-            //const userInit = await userApi.getInitUserInfo();
-            console.log('didnt have oauthuser, now we do!!!!');
+            const userInit = await userApi.getInitUserInfo();
+            console.log('didnt have oauthuser, now we do!!!!', userInit);
             this.setState({
                 userInitLoading: false,
+                userAppetite: userInit.appetite || [],
+                userFollowing: userInit.following || [],
             });
         }
     }
