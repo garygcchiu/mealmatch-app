@@ -12,13 +12,13 @@ export async function editUserInfo(displayUsername) {
     return standardPost('/users/info', { display_username: displayUsername });
 }
 
-export async function followUser(userId) {
-    return standardPost('/users/info', { add_following: [userId] });
+export async function followUser(displayUsername) {
+    return standardPost('/users/info', { add_following: [displayUsername] });
 }
 
-export async function unfollowUser(userId, currentFollowing = []) {
+export async function unfollowUser(displayUsername, currentFollowing = []) {
     return standardPost('/users/info', {
-        set_following: currentFollowing.filter((f) => f !== userId),
+        set_following: currentFollowing.filter((f) => f !== displayUsername),
     });
 }
 

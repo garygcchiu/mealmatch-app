@@ -18,7 +18,7 @@ const CategoryList = ({
         addToUserAppetite,
         removeFromUserAppetite,
     } = useContext(GlobalContext);
-    const [isItemLoading, setIsItemLoading] = useState([]); // itemId: boolean
+    const [isItemLoading, setIsItemLoading] = useState([]); // [itemId]
 
     const renderCategory = (item, isInAppetite) => {
         const handleActionButtonPress = async (itemId) => {

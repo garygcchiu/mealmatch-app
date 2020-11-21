@@ -36,7 +36,7 @@ export default function FriendsScreen({ navigation }) {
         <View style={styles.container}>
             <FlatList
                 data={userFollowing}
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item) => item}
                 renderItem={renderItem}
                 style={{ width: '100%' }}
             />

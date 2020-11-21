@@ -10,6 +10,8 @@ export default function SearchScreen({ navigation }) {
     const [query, setQuery] = useState('');
     const [searchResults, setSearchResults] = useState({});
     const [searching, setSearching] = useState(false);
+    const [isRequestLoading, setIsRequestLoading] = useState([]);
+
     const { followUser, userFollowing } = useContext(GlobalContext);
 
     const handleSearchQueryChange = (newValue) => {
@@ -26,6 +28,16 @@ export default function SearchScreen({ navigation }) {
         }
 
         setQuery(newValue);
+    };
+
+    const handleFollowPress = async (displayUsername) => {
+        setIsRequestLoading([...isRequestLoading, displayUsername]);
+
+        await followUser(displayUsername);
+
+        setIsRequestLoading([
+            ...isRequestLoading.filter((du) => du !== displayUsername),
+        ]);
     };
 
     const renderUserItem = ({ item }) => (
@@ -45,13 +57,16 @@ export default function SearchScreen({ navigation }) {
                 <ListItem.Title style={styles.profileItem}>
                     {item.display_username}
                 </ListItem.Title>
-                {userFollowing.includes(item.id) ? (
+                {userFollowing.includes(item.display_username) ? (
                     <Button type="outline" title={'Following'} />
                 ) : (
                     <Button
                         type="outline"
                         title={'Follow'}
-                        onPress={() => followUser(item.id)}
+                        loading={isRequestLoading.includes(
+                            item.display_username
+                        )}
+                        onPress={() => handleFollowPress(item.display_username)}
                     />
                 )}
             </ListItem.Content>

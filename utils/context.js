@@ -37,13 +37,13 @@ class State extends React.Component {
             setSkipChooseUsername: () => {
                 this.setState({ skipChooseUsername: true });
             },
-            followUser: async (userId) => {
-                const followRes = await userApi.followUser(userId);
+            followUser: async (userDisplayUsername) => {
+                const followRes = await userApi.followUser(userDisplayUsername);
                 this.setState({ userFollowing: followRes.following });
             },
-            unfollowUser: async (userId) => {
+            unfollowUser: async (userDisplayUsername) => {
                 const unfollowRes = await userApi.unfollowUser(
-                    userId,
+                    userDisplayUsername,
                     this.state.userFollowing
                 );
                 this.setState({ userFollowing: unfollowRes.following });
