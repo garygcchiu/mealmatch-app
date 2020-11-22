@@ -11,6 +11,8 @@ import SearchScreen from '../screens/SearchScreen';
 import FriendsScreen from '../screens/FriendsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import AppetiteIcon from '../components/AppetiteIcon';
+import SettingsScreen from '../screens/SettingsScreen';
+import FriendProfileScreen from '../screens/FriendProfileScreen';
 
 const BottomTab = createBottomTabNavigator();
 
@@ -59,7 +61,7 @@ export default function BottomTabNavigator() {
                 }}
             />
             <BottomTab.Screen
-                name="Me"
+                name="Profile"
                 component={TabFiveNavigator}
                 options={{
                     tabBarIcon: ({ color }) => (
@@ -130,6 +132,10 @@ function TabFourNavigator() {
                 component={FriendsScreen}
                 options={{ headerTitle: 'Friends' }}
             />
+            <TabFourStack.Screen
+                name="FriendProfile"
+                component={FriendProfileScreen}
+            />
         </TabFourStack.Navigator>
     );
 }
@@ -142,6 +148,14 @@ function TabFiveNavigator() {
                 name="ProfileScreen"
                 component={ProfileScreen}
                 options={{ headerTitle: 'Profile' }}
+                initialParams={{
+                    displayUsername: '-1',
+                }}
+            />
+            <TabFiveStack.Screen
+                name="SettingsScreen"
+                component={SettingsScreen}
+                options={{ headerTitle: 'Settings' }}
             />
         </TabFiveStack.Navigator>
     );

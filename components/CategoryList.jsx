@@ -11,6 +11,7 @@ const CategoryList = ({
     categories,
     showClearAllButton = false,
     onClearAllButtonPress,
+    showActionButton = true,
 }) => {
     const colorScheme = useColorScheme();
     const {
@@ -18,7 +19,7 @@ const CategoryList = ({
         addToUserAppetite,
         removeFromUserAppetite,
     } = useContext(GlobalContext);
-    const [isItemLoading, setIsItemLoading] = useState([]); // itemId: boolean
+    const [isItemLoading, setIsItemLoading] = useState([]); // [itemId]
 
     const renderCategory = (item, isInAppetite) => {
         const handleActionButtonPress = async (itemId) => {
@@ -40,6 +41,7 @@ const CategoryList = ({
                 isInAppetite={isInAppetite}
                 onActionButtonPress={() => handleActionButtonPress(item.id)}
                 isLoading={isItemLoading.includes(item.id)}
+                showActionButton={showActionButton}
             />
         );
     };

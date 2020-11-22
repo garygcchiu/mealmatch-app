@@ -32,9 +32,7 @@ export default function ExploreScreen({ navigation }) {
     const [selectedFilterOption, setSelectedFilterOption] = useState(
         filterMap.POPULAR
     );
-    const { userAppetite, fetchUserAppetite, clearUserAppetite } = useContext(
-        GlobalContext
-    );
+    const { userAppetite, clearUserAppetite } = useContext(GlobalContext);
 
     const getSectionedCategories = (filter, searchResults = []) => {
         if (filter === filterMap.POPULAR) {
@@ -117,7 +115,6 @@ export default function ExploreScreen({ navigation }) {
         fuse = new Fuse(searchableCategories, searchOptions);
 
         setCategories(getSectionedCategories(selectedFilterOption));
-        fetchUserAppetite();
     }, []);
 
     const updateSearch = (text) => {

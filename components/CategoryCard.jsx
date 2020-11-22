@@ -35,6 +35,7 @@ export default function CategoryCard({
     isInAppetite = false,
     onActionButtonPress,
     isLoading,
+    showActionButton,
 }) {
     return (
         <View style={styles.container}>
@@ -45,11 +46,13 @@ export default function CategoryCard({
                     imageStyle={styles.imageBackground}
                 >
                     <Text style={styles.text}>{title}</Text>
-                    <AppetiteToggleButton
-                        isInAppetite={isInAppetite}
-                        onButtonPress={onActionButtonPress}
-                        isLoading={isLoading}
-                    />
+                    {showActionButton && (
+                        <AppetiteToggleButton
+                            isInAppetite={isInAppetite}
+                            onButtonPress={onActionButtonPress}
+                            isLoading={isLoading}
+                        />
+                    )}
                 </ImageBackground>
             </TouchableOpacity>
         </View>

@@ -1,15 +1,25 @@
 const { standardGet, standardPost } = require('./base');
 
-export async function getAppetite() {
-    return standardGet(`/users/appetite`);
-}
-
 export async function editAppetite(appetite) {
     return standardPost('/users/appetite', appetite);
 }
 
 export async function editUserInfo(displayUsername) {
     return standardPost('/users/info', { display_username: displayUsername });
+}
+
+export async function followUser(displayUsername) {
+    return standardPost('/users/info', { add_following: [displayUsername] });
+}
+
+export async function unfollowUser(displayUsername, currentFollowing = []) {
+    return standardPost('/users/info', {
+        set_following: currentFollowing.filter((f) => f !== displayUsername),
+    });
+}
+
+export async function getMutualAppetite(user1, user2) {
+    return standardGet(`/users/appetite`, { user1, user2 });
 }
 
 export async function getInitUserInfo() {
