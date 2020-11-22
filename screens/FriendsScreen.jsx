@@ -15,10 +15,10 @@ export default function FriendsScreen({ navigation }) {
             bottomDivider
             key={item}
             onPress={() =>
-                navigation.navigate('Profile', {
-                    screen: 'ProfileScreen',
+                navigation.navigate('Friends', {
+                    screen: 'FriendProfile',
                     params: {
-                        displayUsername: item.display_username,
+                        displayUsername: item,
                     },
                 })
             }

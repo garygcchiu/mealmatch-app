@@ -12,6 +12,7 @@ import FriendsScreen from '../screens/FriendsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import AppetiteIcon from '../components/AppetiteIcon';
 import SettingsScreen from '../screens/SettingsScreen';
+import FriendProfileScreen from '../screens/FriendProfileScreen';
 
 const BottomTab = createBottomTabNavigator();
 
@@ -130,6 +131,10 @@ function TabFourNavigator() {
                 name="FriendsScreen"
                 component={FriendsScreen}
                 options={{ headerTitle: 'Friends' }}
+            />
+            <TabFourStack.Screen
+                name="FriendProfile"
+                component={FriendProfileScreen}
             />
         </TabFourStack.Navigator>
     );

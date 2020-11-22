@@ -11,6 +11,7 @@ const CategoryList = ({
     categories,
     showClearAllButton = false,
     onClearAllButtonPress,
+    showActionButton = true,
 }) => {
     const colorScheme = useColorScheme();
     const {
@@ -40,6 +41,7 @@ const CategoryList = ({
                 isInAppetite={isInAppetite}
                 onActionButtonPress={() => handleActionButtonPress(item.id)}
                 isLoading={isItemLoading.includes(item.id)}
+                showActionButton={showActionButton}
             />
         );
     };

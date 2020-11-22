@@ -45,8 +45,8 @@ export default function SearchScreen({ navigation }) {
             bottomDivider
             key={item.id}
             onPress={() =>
-                navigation.navigate('Profile', {
-                    screen: 'ProfileScreen',
+                navigation.navigate('Friends', {
+                    screen: 'FriendProfile',
                     params: {
                         displayUsername: item.display_username,
                     },
