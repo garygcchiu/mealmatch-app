@@ -1,14 +1,13 @@
-import React, { useEffect } from 'react';
-import { StyleSheet, FlatList, SectionList } from 'react-native';
+import React from 'react';
+import { StyleSheet, SectionList } from 'react-native';
 import { withOAuth } from 'aws-amplify-react-native';
 
 import { View } from '../components/Themed';
 import { useLayoutEffect } from 'react';
-import { ListItem, Icon, Avatar } from 'react-native-elements';
+import { ListItem, Avatar } from 'react-native-elements';
 
 function ProfileScreen(props) {
-    const { oAuthUser, signOut, navigation, route } = props;
-    const { params } = route;
+    const { oAuthUser, signOut, navigation } = props;
 
     useLayoutEffect(() => {
         navigation.setOptions({
