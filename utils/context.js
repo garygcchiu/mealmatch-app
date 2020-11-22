@@ -1,5 +1,6 @@
 import React, { createContext } from 'react';
 import * as userApi from '../api/user';
+import * as groupApi from '../api/group';
 import { withOAuth } from 'aws-amplify-react-native';
 
 const GlobalContext = createContext(undefined);
@@ -12,6 +13,7 @@ class State extends React.Component {
             userInitLoading: true,
             userAppetite: [],
             userFollowing: [],
+            userGroups: [],
             addToUserAppetite: async (id) => {
                 const addRes = await userApi.editAppetite([
                     ...this.state.userAppetite,
@@ -44,6 +46,13 @@ class State extends React.Component {
                 );
                 this.setState({ userFollowing: unfollowRes.following });
             },
+            createNewGroup: async (groupName, userDisplayUsername) => {
+                const createGroupRes = await groupApi.createNewGroup(
+                    groupName,
+                    userDisplayUsername
+                );
+                this.setState({ userGroups: createGroupRes.groups });
+            },
         };
     }
 
@@ -55,6 +64,7 @@ class State extends React.Component {
                 userInitLoading: false,
                 userAppetite: userInit.appetite || [],
                 userFollowing: userInit.following || [],
+                userGroups: userInit.groups || [],
             });
         }
     }

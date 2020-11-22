@@ -13,6 +13,7 @@ import ProfileScreen from '../screens/ProfileScreen';
 import AppetiteIcon from '../components/AppetiteIcon';
 import SettingsScreen from '../screens/SettingsScreen';
 import FriendProfileScreen from '../screens/FriendProfileScreen';
+import GroupScreen from '../screens/GroupScreen';
 
 const BottomTab = createBottomTabNavigator();
 
@@ -52,7 +53,7 @@ export default function BottomTabNavigator() {
                 }}
             />
             <BottomTab.Screen
-                name="Friends"
+                name="Social"
                 component={TabFourNavigator}
                 options={{
                     tabBarIcon: ({ color }) => (
@@ -136,6 +137,7 @@ function TabFourNavigator() {
                 name="FriendProfile"
                 component={FriendProfileScreen}
             />
+            <TabFourStack.Screen name="Group" component={GroupScreen} />
         </TabFourStack.Navigator>
     );
 }

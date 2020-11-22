@@ -31,7 +31,7 @@ function ProfileScreen(props) {
                 {
                     title: 'View Following',
                     onPress: () => {
-                        navigation.navigate('Friends');
+                        navigation.navigate('Social');
                     },
                 },
                 {

@@ -1,44 +1,107 @@
-import * as React from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { FlatList, SectionList, StyleSheet } from 'react-native';
+import { withOAuth } from 'aws-amplify-react-native';
 
-import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
-import { useContext } from 'react';
 import GlobalContext from '../utils/context';
-import { Button, ListItem } from 'react-native-elements';
+import { Icon, ListItem } from 'react-native-elements';
+import OverlayInputModal from '../components/OverlayInputModal';
 
-export default function FriendsScreen({ navigation }) {
-    const { userFollowing } = useContext(GlobalContext);
+function FriendsScreen({ navigation, oAuthUser }) {
+    const { userFollowing, userGroups, createNewGroup } = useContext(
+        GlobalContext
+    );
+    const [showCreateNewGroupModal, setShowCreateNewGroupModal] = useState(
+        false
+    );
+    const [creatingNewGroup, setCreatingNewGroup] = useState(false);
 
-    const renderItem = ({ item }) => (
-        <ListItem
-            bottomDivider
-            key={item}
-            onPress={() =>
-                navigation.navigate('Friends', {
+    const sectionData = [
+        {
+            title: 'Groups',
+            data: userGroups,
+        },
+        { title: 'Following', data: userFollowing },
+    ];
+
+    const renderItem = ({ item, section }) => {
+        const itemTitle = section.title === 'Following' ? item : item.name;
+        const itemOnPress = () => {
+            if (section.title === 'Following') {
+                navigation.navigate('Social', {
                     screen: 'FriendProfile',
                     params: {
                         displayUsername: item,
                     },
-                })
+                });
+            } else {
+                navigation.navigate('Social', {
+                    screen: 'Group',
+                    params: {
+                        groupId: item.id,
+                    },
+                });
             }
-        >
-            <ListItem.Content style={styles.resultsItem}>
-                <ListItem.Title style={styles.profileItem}>
-                    {item}
-                </ListItem.Title>
-            </ListItem.Content>
-            <ListItem.Chevron />
-        </ListItem>
-    );
+        };
+
+        return (
+            <ListItem bottomDivider onPress={itemOnPress}>
+                <ListItem.Content style={styles.resultsItem}>
+                    <ListItem.Title style={styles.profileItem}>
+                        {itemTitle}
+                    </ListItem.Title>
+                </ListItem.Content>
+                <ListItem.Chevron />
+            </ListItem>
+        );
+    };
+
+    const renderSectionHeader = (title) => {
+        return (
+            <View style={styles.sectionHeaderContainer}>
+                <Text style={styles.sectionHeaderText}>{title}</Text>
+                {title === 'Groups' && (
+                    <Icon
+                        name={'ios-add'}
+                        type={'ionicon'}
+                        size={34}
+                        onPress={() => setShowCreateNewGroupModal(true)}
+                    />
+                )}
+            </View>
+        );
+    };
+
+    const handleCreateNewGroup = async (groupName) => {
+        setCreatingNewGroup(true);
+
+        await createNewGroup(
+            groupName,
+            oAuthUser.attributes['custom:display_username']
+        );
+
+        setShowCreateNewGroupModal(false);
+        setCreatingNewGroup(false);
+    };
 
     return (
         <View style={styles.container}>
-            <FlatList
-                data={userFollowing}
-                keyExtractor={(item) => item}
+            <SectionList
+                sections={sectionData}
+                keyExtractor={(item) => item.id || item}
                 renderItem={renderItem}
+                renderSectionHeader={({ section: { title } }) =>
+                    renderSectionHeader(title)
+                }
                 style={{ width: '100%' }}
+            />
+            <OverlayInputModal
+                title={'Create New Group'}
+                showOverlay={showCreateNewGroupModal}
+                inputLabel={'Group Name'}
+                onBackdropPress={() => setShowCreateNewGroupModal(false)}
+                onSubmitPress={handleCreateNewGroup}
+                buttonLoading={creatingNewGroup}
             />
         </View>
     );
@@ -59,4 +122,20 @@ const styles = StyleSheet.create({
         height: 1,
         width: '80%',
     },
+    sectionHeaderContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        height: 50,
+        paddingRight: 14,
+        backgroundColor: '#efefef',
+    },
+    sectionHeaderText: {
+        fontSize: 18,
+        paddingLeft: 14,
+        paddingRight: 14,
+    },
 });
+
+export default withOAuth(FriendsScreen);

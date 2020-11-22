@@ -155,5 +155,6 @@ const styles = StyleSheet.create({
     },
     resultsList: {
         marginTop: 10,
+        width: '100%',
     },
 });

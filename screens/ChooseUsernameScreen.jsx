@@ -38,6 +38,8 @@ const ChooseUsernameScreen = ({ navigation }) => {
             return;
         }
 
+        // TODO: check dynamoDB if username exists
+
         const user = await Auth.currentAuthenticatedUser();
         const updateUsernameRes = await Auth.updateUserAttributes(user, {
             'custom:display_username': username,
