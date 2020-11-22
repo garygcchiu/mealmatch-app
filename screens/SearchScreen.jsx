@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet } from 'react-native';
 
 import * as searchApi from '../api/search';
-import { View } from '../components/Themed';
+import { View, Text } from '../components/Themed';
 import { ListItem, SearchBar, Button } from 'react-native-elements';
 import GlobalContext from '../utils/context';
 
@@ -10,6 +10,7 @@ export default function SearchScreen({ navigation }) {
     const [query, setQuery] = useState('');
     const [searchResults, setSearchResults] = useState({});
     const [searching, setSearching] = useState(false);
+    const [searched, setSearched] = useState(false);
     const [isRequestLoading, setIsRequestLoading] = useState([]);
 
     const { followUser, userFollowing } = useContext(GlobalContext);
@@ -24,7 +25,12 @@ export default function SearchScreen({ navigation }) {
                     setSearchResults(searchRes.results);
                 })
                 .catch((err) => console.log('search error', err))
-                .finally(() => setSearching(false));
+                .finally(() => {
+                    setSearching(false);
+                    setSearched(true);
+                });
+        } else {
+            setSearched(false);
         }
 
         setQuery(newValue);
@@ -94,12 +100,22 @@ export default function SearchScreen({ navigation }) {
                 <ActivityIndicator size={'large'} style={{ height: '80%' }} />
             ) : (
                 <View style={styles.resultsContainer}>
-                    <FlatList
-                        data={searchResults.users}
-                        keyExtractor={(item) => item.id}
-                        renderItem={renderUserItem}
-                        style={{ width: '100%' }}
-                    />
+                    {searchResults?.users?.length ? (
+                        <FlatList
+                            data={searchResults.users}
+                            keyExtractor={(item) => item.id}
+                            renderItem={renderUserItem}
+                            style={{ width: '100%' }}
+                        />
+                    ) : (
+                        searched && (
+                            <View style={styles.noResultsContainer}>
+                                <Text style={styles.noResultsText}>
+                                    No Results Found
+                                </Text>
+                            </View>
+                        )
+                    )}
                 </View>
             )}
         </View>
@@ -137,10 +153,20 @@ const styles = StyleSheet.create({
     },
     resultsContainer: {
         width: '100%',
+        display: 'flex',
     },
     resultsItem: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
+    },
+    noResultsContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '90%',
+    },
+    noResultsText: {
+        color: '#8e8e8f',
+        fontSize: 20,
     },
 });
