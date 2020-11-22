@@ -49,7 +49,17 @@ const CategoryList = ({
     const renderSectionHeader = (title) => {
         return (
             <View style={styles.sectionHeaderContainer}>
-                <Text style={styles.sectionHeaderText}>{title}</Text>
+                <Text
+                    style={[
+                        styles.sectionHeaderText,
+                        {
+                            backgroundColor:
+                                colorScheme === 'light' ? 'white' : 'black',
+                        },
+                    ]}
+                >
+                    {title}
+                </Text>
                 {showClearAllButton && (
                     <ClearAppetiteButton
                         onButtonPress={onClearAllButtonPress}
@@ -84,7 +94,6 @@ const styles = StyleSheet.create({
         fontSize: 24,
         paddingLeft: 14,
         paddingRight: 14,
-        backgroundColor: 'white',
         height: 50,
         paddingTop: 16,
         marginBottom: 8,

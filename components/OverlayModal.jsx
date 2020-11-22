@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     overlayTitle: {
-        paddingTop: 5,
+        paddingTop: 10,
         fontSize: 20,
     },
     overlayDescription: {
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#030303',
         paddingHorizontal: 20,
-        marginTop: 12,
+        marginTop: 16,
     },
     overlayButtons: {
         marginTop: 28,

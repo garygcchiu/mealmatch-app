@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useLayoutEffect } from 'react';
+import React, { useEffect, useState, useLayoutEffect, useContext } from 'react';
 import { StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import { ListItem, Icon, Avatar, Button } from 'react-native-elements';
 import { withOAuth } from 'aws-amplify-react-native';
@@ -7,12 +7,21 @@ import { View, Text } from '../components/Themed';
 import { getMutualAppetite } from '../api/user';
 import CategoryList from '../components/CategoryList';
 import Categories from '../data/categories';
+import OverlayModal from '../components/OverlayModal';
+import GlobalContext from '../utils/context';
 
 function FriendProfileScreen(props) {
     const { navigation, route, oAuthUser } = props;
-    const { params } = route;
+    const profileUser = route.params.displayUsername;
     const [loading, setLoading] = useState(false);
+    const [followToggleLoading, setFollowToggleLoading] = useState(false);
+    const [showUnfollowModal, setShowUnfollowModal] = useState(false);
     const [mutualAppetite, setMutualAppetite] = useState([]);
+    const { unfollowUser, userFollowing, followUser } = useContext(
+        GlobalContext
+    );
+
+    const isUserFollowing = userFollowing.includes(profileUser);
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -24,7 +33,7 @@ function FriendProfileScreen(props) {
     const handleCompareAppetitePress = async () => {
         setLoading(true);
         const mutualAppetiteRes = await getMutualAppetite(
-            params.displayUsername,
+            profileUser,
             oAuthUser.attributes['custom:display_username']
         );
 
@@ -41,6 +50,16 @@ function FriendProfileScreen(props) {
         setLoading(false);
     };
 
+    const handleFollowToggleButtonPress = async () => {
+        if (isUserFollowing) {
+            setShowUnfollowModal(true);
+        } else {
+            setFollowToggleLoading(true);
+            await followUser(profileUser);
+            setFollowToggleLoading(false);
+        }
+    };
+
     return (
         <View style={styles.container}>
             <Avatar
@@ -49,11 +68,13 @@ function FriendProfileScreen(props) {
                 rounded
                 containerStyle={styles.avatarContainer}
             />
-            <Text style={styles.username}>@{params.displayUsername}</Text>
+            <Text style={styles.username}>@{profileUser}</Text>
             <Button
                 type="outline"
-                title={'Following'}
+                title={isUserFollowing ? 'Following' : 'Follow'}
                 containerStyle={styles.buttons}
+                onPress={handleFollowToggleButtonPress}
+                loading={followToggleLoading}
             />
             <Button
                 type="solid"
@@ -84,6 +105,17 @@ function FriendProfileScreen(props) {
                     />
                 </View>
             )}
+            <OverlayModal
+                title={'Unfollow'}
+                description={'Are you sure you want to unfollow this user?'}
+                showOverlay={showUnfollowModal}
+                onCancelPress={() => setShowUnfollowModal(false)}
+                onConfirmPress={() => {
+                    unfollowUser(profileUser);
+                    setShowUnfollowModal(false);
+                }}
+                onBackdropPress={() => setShowUnfollowModal(false)}
+            />
         </View>
     );
 }
