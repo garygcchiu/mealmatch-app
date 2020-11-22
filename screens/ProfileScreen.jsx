@@ -1,48 +1,107 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, FlatList } from 'react-native';
+import { StyleSheet, FlatList, SectionList } from 'react-native';
 import { withOAuth } from 'aws-amplify-react-native';
 
 import { View } from '../components/Themed';
 import { useLayoutEffect } from 'react';
-import { ListItem, Icon } from 'react-native-elements';
+import { ListItem, Icon, Avatar } from 'react-native-elements';
 
 function ProfileScreen(props) {
     const { oAuthUser, signOut, navigation, route } = props;
     const { params } = route;
-    const isUserProfile = params.displayUsername === '-1';
-
-    useEffect(() => {
-        console.log('Profile Params = ', params);
-    }, [params]);
 
     useLayoutEffect(() => {
         navigation.setOptions({
             headerShown: true,
             headerTitle: `@${
-                isUserProfile
-                    ? oAuthUser?.attributes?.['custom:display_username'] || ''
-                    : params.displayUsername
+                oAuthUser?.attributes?.['custom:display_username'] || ''
             }`,
-            headerRight: () =>
-                isUserProfile && (
-                    <Icon
-                        name={'ios-settings'}
-                        type={'ionicon'}
-                        style={styles.headerSettings}
-                        onPress={() => navigation.navigate('SettingsScreen')}
-                    />
-                ),
         });
     }, [navigation, oAuthUser]);
 
+    const PROFILE_ITEMS = [
+        {
+            title: 'User',
+            data: [
+                {
+                    title: 'View Appetite',
+                    onPress: () => {
+                        navigation.navigate('Appetite');
+                    },
+                },
+                {
+                    title: 'View Following',
+                    onPress: () => {
+                        navigation.navigate('Friends');
+                    },
+                },
+                {
+                    title: 'Sign Out',
+                    onPress: () => {
+                        signOut();
+                    },
+                },
+            ],
+        },
+        {
+            title: 'MealMatch',
+            data: [
+                {
+                    title: 'About',
+                    onPress: (item) => {
+                        console.log('pressed!!!');
+                    },
+                },
+                {
+                    title: 'Privacy Policy',
+                    onPress: (item) => {
+                        console.log('pressed!!!');
+                    },
+                },
+                {
+                    title: 'Terms of Service',
+                    onPress: (item) => {
+                        console.log('pressed!!!');
+                    },
+                },
+                {
+                    title: 'Support',
+                    onPress: (item) => {
+                        console.log('pressed!!!');
+                    },
+                },
+            ],
+        },
+    ];
+
+    const renderItem = ({ item }) => (
+        <ListItem bottomDivider key={item.title} onPress={item.onPress}>
+            <ListItem.Content>
+                <ListItem.Title style={styles.profileItem}>
+                    {item.title}
+                </ListItem.Title>
+            </ListItem.Content>
+            <ListItem.Chevron />
+        </ListItem>
+    );
+
     return (
         <View style={styles.container}>
-            {/*<FlatList*/}
-            {/*    data={[]}*/}
-            {/*    keyExtractor={(item) => item.title}*/}
-            {/*    renderItem={renderItem}*/}
-            {/*    style={{ width: '100%' }}*/}
-            {/*/>*/}
+            <Avatar
+                size={'large'}
+                icon={{ name: 'user', type: 'font-awesome' }}
+                rounded
+                containerStyle={styles.avatarContainer}
+            />
+            <SectionList
+                sections={PROFILE_ITEMS}
+                renderItem={renderItem}
+                style={{ width: '100%' }}
+                renderSectionHeader={() => (
+                    <View style={styles.sectionDivider} />
+                )}
+                keyExtractor={(item) => item.title}
+            />
         </View>
     );
 }
@@ -55,11 +114,20 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-start',
         alignSelf: 'stretch',
+        paddingTop: '5%',
+    },
+    avatarContainer: {
+        backgroundColor: '#cecece',
+        marginBottom: 24,
     },
     profileItem: {
         color: 'black',
     },
     headerSettings: {
         marginRight: 12,
+    },
+    sectionDivider: {
+        height: 10,
+        backgroundColor: '#efefef',
     },
 });
