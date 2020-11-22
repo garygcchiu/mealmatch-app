@@ -30,10 +30,6 @@ class State extends React.Component {
                     .editAppetite([])
                     .then(() => this.setState({ userAppetite: [] }));
             },
-            fetchUserAppetite: async () => {
-                const userAppetite = await userApi.getAppetite();
-                this.setState({ userAppetite });
-            },
             setSkipChooseUsername: () => {
                 this.setState({ skipChooseUsername: true });
             },
