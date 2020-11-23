@@ -1,5 +1,5 @@
 const { standardGet, standardPost } = require('./base');
 
-export async function search(query) {
+export async function searchUsers(query) {
     return standardGet(`/search`, { query });
 }

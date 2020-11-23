@@ -25,3 +25,11 @@ export async function getMutualAppetite(user1, user2) {
 export async function getInitUserInfo() {
     return standardGet('/users/info');
 }
+
+export async function respondGroupInvite(groupId, groupName, accept = false) {
+    return standardPost('/users/groups/respond', {
+        group_id: groupId,
+        group_name: groupName,
+        accept: accept,
+    });
+}

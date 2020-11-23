@@ -14,6 +14,18 @@ class State extends React.Component {
             userAppetite: [],
             userFollowing: [],
             userGroups: [],
+            userGroupInvites: [],
+            signOut: () => {
+                this.setState({
+                    userAppetite: [],
+                    userFollowing: [],
+                    userGroups: [],
+                    userGroupInvites: [],
+                    userInitLoading: false,
+                    shouldSkipUsername: false,
+                });
+                props.signOut();
+            },
             addToUserAppetite: async (id) => {
                 const addRes = await userApi.editAppetite([
                     ...this.state.userAppetite,
@@ -53,20 +65,29 @@ class State extends React.Component {
                 );
                 this.setState({ userGroups: createGroupRes.groups });
             },
+            answerGroupInvite: async (groupId, groupName, accept) => {
+                await userApi.respondGroupInvite(groupId, groupName, accept);
+                this.fetchUserInit();
+            },
         };
     }
 
-    async componentDidUpdate(prevProps, prevState, snapshot) {
+    componentDidUpdate(prevProps, prevState, snapshot) {
         if (!prevProps.oAuthUser && this.props.oAuthUser) {
-            const userInit = await userApi.getInitUserInfo();
-            console.log('didnt have oauthuser, now we do!!!!', userInit);
-            this.setState({
-                userInitLoading: false,
-                userAppetite: userInit.appetite || [],
-                userFollowing: userInit.following || [],
-                userGroups: userInit.groups || [],
-            });
+            this.fetchUserInit();
         }
+    }
+
+    async fetchUserInit() {
+        const userInit = await userApi.getInitUserInfo();
+        console.log('didnt have oauthuser, now we do!!!!', userInit);
+        this.setState({
+            userInitLoading: false,
+            userAppetite: userInit.appetite || [],
+            userFollowing: userInit.following || [],
+            userGroups: userInit.groups || [],
+            userGroupInvites: userInit.group_invites || [],
+        });
     }
 
     render() {
