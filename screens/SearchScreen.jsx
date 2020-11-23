@@ -19,7 +19,7 @@ export default function SearchScreen({ navigation }) {
         if (newValue.length > 3) {
             setSearching(true);
             searchApi
-                .search(newValue)
+                .searchUsers(newValue)
                 .then((searchRes) => {
                     console.log('search res = ', searchRes);
                     setSearchResults(searchRes.results);
@@ -51,7 +51,7 @@ export default function SearchScreen({ navigation }) {
             bottomDivider
             key={item.id}
             onPress={() =>
-                navigation.navigate('Friends', {
+                navigation.navigate('Social', {
                     screen: 'FriendProfile',
                     params: {
                         displayUsername: item.display_username,
@@ -60,9 +60,7 @@ export default function SearchScreen({ navigation }) {
             }
         >
             <ListItem.Content style={styles.resultsItem}>
-                <ListItem.Title style={styles.profileItem}>
-                    {item.display_username}
-                </ListItem.Title>
+                <ListItem.Title>{item.display_username}</ListItem.Title>
                 {userFollowing.includes(item.display_username) ? (
                     <Button type="outline" title={'Following'} />
                 ) : (

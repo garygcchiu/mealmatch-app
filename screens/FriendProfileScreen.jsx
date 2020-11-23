@@ -9,6 +9,7 @@ import CategoryList from '../components/CategoryList';
 import Categories from '../data/categories';
 import OverlayModal from '../components/OverlayModal';
 import GlobalContext from '../utils/context';
+import CompareAppetiteButton from '../components/CompareAppetiteButton';
 
 function FriendProfileScreen(props) {
     const { navigation, route, oAuthUser } = props;
@@ -76,21 +77,7 @@ function FriendProfileScreen(props) {
                 onPress={handleFollowToggleButtonPress}
                 loading={followToggleLoading}
             />
-            <Button
-                type="solid"
-                title={'Compare Appetite!'}
-                buttonStyle={styles.compareButton}
-                iconRight={true}
-                icon={
-                    <Icon
-                        type={'ionicon'}
-                        name={'ios-rocket'}
-                        color={'white'}
-                        containerStyle={styles.rocketIcon}
-                    />
-                }
-                onPress={handleCompareAppetitePress}
-            />
+            <CompareAppetiteButton handleOnPress={handleCompareAppetitePress} />
             {loading ? (
                 <ActivityIndicator
                     size={'large'}
@@ -139,14 +126,6 @@ const styles = StyleSheet.create({
     },
     buttons: {
         marginVertical: 12,
-    },
-    compareButton: {
-        borderRadius: 12,
-        height: 50,
-        width: 220,
-    },
-    rocketIcon: {
-        marginLeft: 10,
     },
     resultsLoader: {
         height: '60%',

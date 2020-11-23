@@ -14,11 +14,18 @@ import AppetiteIcon from '../components/AppetiteIcon';
 import SettingsScreen from '../screens/SettingsScreen';
 import FriendProfileScreen from '../screens/FriendProfileScreen';
 import GroupScreen from '../screens/GroupScreen';
+import { useContext } from 'react';
+import GlobalContext from '../utils/context';
+import { withBadge } from 'react-native-elements';
 
 const BottomTab = createBottomTabNavigator();
 
 export default function BottomTabNavigator() {
     const colorScheme = useColorScheme();
+    const { userGroupInvites } = useContext(GlobalContext);
+    const BadgedTabBarIcon = withBadge(userGroupInvites.length, {
+        status: 'primary',
+    })(TabBarIcon);
 
     return (
         <BottomTab.Navigator
@@ -56,9 +63,12 @@ export default function BottomTabNavigator() {
                 name="Social"
                 component={TabFourNavigator}
                 options={{
-                    tabBarIcon: ({ color }) => (
-                        <TabBarIcon name="md-people" color={color} />
-                    ),
+                    tabBarIcon: ({ color }) =>
+                        userGroupInvites.length ? (
+                            <BadgedTabBarIcon name="md-people" color={color} />
+                        ) : (
+                            <TabBarIcon name="md-people" color={color} />
+                        ),
                 }}
             />
             <BottomTab.Screen

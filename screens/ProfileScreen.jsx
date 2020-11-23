@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, SectionList } from 'react-native';
 import { withOAuth } from 'aws-amplify-react-native';
 
 import { View } from '../components/Themed';
 import { useLayoutEffect } from 'react';
 import { ListItem, Avatar } from 'react-native-elements';
+import GlobalContext from '../utils/context';
 
 function ProfileScreen(props) {
-    const { oAuthUser, signOut, navigation } = props;
+    const { oAuthUser, navigation } = props;
+    const { signOut } = useContext(GlobalContext);
 
     useLayoutEffect(() => {
         navigation.setOptions({
