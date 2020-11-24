@@ -18,6 +18,7 @@ const GroupMemberActions = ({
     handleKickUser,
     handleLeaveGroup,
     isLeavingGroup,
+    isKickingFromGroup,
 }) => {
     const [showLeaveGroupModal, setShowLeaveGroupModal] = useState(false);
     const [showKickMemberModal, setShowKickMemberModal] = useState(false);
@@ -107,7 +108,11 @@ const GroupMemberActions = ({
                         showOverlay={showKickMemberModal}
                         onCancelPress={() => setShowKickMemberModal(false)}
                         onBackdropPress={() => setShowKickMemberModal(false)}
-                        onConfirmPress={(member) => handleKickUser(member)}
+                        onConfirmPress={async () => {
+                            await handleKickUser(member.id);
+                            setShowKickMemberModal(false);
+                        }}
+                        isConfirmButtonLoading={isKickingFromGroup}
                     />
                 </View>
             </SwipeablePanel>

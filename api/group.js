@@ -22,3 +22,10 @@ export async function inviteUserToGroup(userId, groupId, groupName) {
         group_name: groupName,
     });
 }
+
+export async function kickUserFromGroup(userId, groupId) {
+    return standardPost('/groups/kick', {
+        user_id: userId,
+        group_id: groupId,
+    });
+}

@@ -56,7 +56,6 @@ function SocialScreen({ navigation, oAuthUser }) {
                     ) : null}
                 </View>
             ),
-            headerTitle: 'Social',
         });
     }, [navigation, userGroupInvites]);
 

@@ -30,6 +30,7 @@ function GroupScreen(props) {
     const [invitedUsers, setInviteUsers] = useState([]);
     const [selectedGroupMember, setSelectedGroupMember] = useState(null);
     const [isLeavingGroup, setIsLeavingGroup] = useState(false);
+    const [isKickingFromGroup, setIsKickingFromGroup] = useState(false);
 
     const { userFollowing, leaveGroup } = useContext(GlobalContext);
 
@@ -120,8 +121,9 @@ function GroupScreen(props) {
 
     const handleLeaveGroup = async () => {
         setIsLeavingGroup(true);
-        console.log('leaving group...');
         await leaveGroup(groupId);
+
+        // update state
         setIsLeavingGroup(false);
         setSelectedGroupMember(null);
         navigation.navigate('Social', {
@@ -130,7 +132,13 @@ function GroupScreen(props) {
     };
 
     const handleKickUser = async (userId) => {
-        console.log('kicking user ', userId);
+        setIsKickingFromGroup(true);
+        await groupApi.kickUserFromGroup(userId, groupId);
+
+        // update state
+        setIsKickingFromGroup(false);
+        setSelectedGroupMember(null);
+        fetchGroupInfo();
     };
 
     return (
@@ -202,6 +210,7 @@ function GroupScreen(props) {
                         handleKickUser={handleKickUser}
                         handleLeaveGroup={handleLeaveGroup}
                         isLeavingGroup={isLeavingGroup}
+                        isKickingFromGroup={isKickingFromGroup}
                     />
                 </View>
             )}
