@@ -13,7 +13,7 @@ import CompareAppetiteButton from '../components/CompareAppetiteButton';
 
 function FriendProfileScreen(props) {
     const { navigation, route, oAuthUser } = props;
-    const profileUser = route.params.displayUsername;
+    const { displayUsername, userId } = route.params;
     const [loading, setLoading] = useState(false);
     const [followToggleLoading, setFollowToggleLoading] = useState(false);
     const [showUnfollowModal, setShowUnfollowModal] = useState(false);
@@ -22,7 +22,8 @@ function FriendProfileScreen(props) {
         GlobalContext
     );
 
-    const isUserFollowing = userFollowing.includes(profileUser);
+    const isUserFollowing =
+        userFollowing.filter((uf) => uf.id === userId).length > 0;
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -34,7 +35,7 @@ function FriendProfileScreen(props) {
     const handleCompareAppetitePress = async () => {
         setLoading(true);
         const mutualAppetiteRes = await getMutualAppetite(
-            profileUser,
+            displayUsername,
             oAuthUser.attributes['custom:display_username']
         );
 
@@ -56,7 +57,7 @@ function FriendProfileScreen(props) {
             setShowUnfollowModal(true);
         } else {
             setFollowToggleLoading(true);
-            await followUser(profileUser);
+            await followUser(userId, displayUsername);
             setFollowToggleLoading(false);
         }
     };
@@ -69,7 +70,7 @@ function FriendProfileScreen(props) {
                 rounded
                 containerStyle={styles.avatarContainer}
             />
-            <Text style={styles.username}>@{profileUser}</Text>
+            <Text style={styles.username}>@{displayUsername}</Text>
             <Button
                 type="outline"
                 title={isUserFollowing ? 'Following' : 'Follow'}
@@ -98,7 +99,7 @@ function FriendProfileScreen(props) {
                 showOverlay={showUnfollowModal}
                 onCancelPress={() => setShowUnfollowModal(false)}
                 onConfirmPress={() => {
-                    unfollowUser(profileUser);
+                    unfollowUser(userId);
                     setShowUnfollowModal(false);
                 }}
                 onBackdropPress={() => setShowUnfollowModal(false)}

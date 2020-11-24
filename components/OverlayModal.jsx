@@ -10,6 +10,7 @@ const OverlayModal = ({
     onConfirmPress,
     onCancelPress,
     onBackdropPress,
+    isConfirmButtonLoading,
 }) => {
     return (
         <Overlay
@@ -30,6 +31,7 @@ const OverlayModal = ({
                         title={'Yes'}
                         buttonStyle={styles.overlayButton}
                         onPress={() => onConfirmPress()}
+                        loading={isConfirmButtonLoading}
                     />
                     <Button
                         title={'No'}
@@ -46,7 +48,7 @@ const OverlayModal = ({
 const styles = StyleSheet.create({
     overlay: {
         width: Dimensions.get('window').width - 50,
-        height: 220,
+        height: 240,
         borderRadius: 25,
     },
     separator: {

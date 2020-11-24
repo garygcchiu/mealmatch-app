@@ -5,6 +5,7 @@ import * as searchApi from '../api/search';
 import { View, Text } from '../components/Themed';
 import { ListItem, SearchBar, Button } from 'react-native-elements';
 import GlobalContext from '../utils/context';
+import ListHeader from '../components/ListHeader';
 
 export default function SearchScreen({ navigation }) {
     const [query, setQuery] = useState('');
@@ -36,10 +37,10 @@ export default function SearchScreen({ navigation }) {
         setQuery(newValue);
     };
 
-    const handleFollowPress = async (displayUsername) => {
+    const handleFollowPress = async (userId, displayUsername) => {
         setIsRequestLoading([...isRequestLoading, displayUsername]);
 
-        await followUser(displayUsername);
+        await followUser(userId, displayUsername);
 
         setIsRequestLoading([
             ...isRequestLoading.filter((du) => du !== displayUsername),
@@ -54,6 +55,7 @@ export default function SearchScreen({ navigation }) {
                 navigation.navigate('Social', {
                     screen: 'FriendProfile',
                     params: {
+                        userId: item.id,
                         displayUsername: item.display_username,
                     },
                 })
@@ -61,7 +63,7 @@ export default function SearchScreen({ navigation }) {
         >
             <ListItem.Content style={styles.resultsItem}>
                 <ListItem.Title>{item.display_username}</ListItem.Title>
-                {userFollowing.includes(item.display_username) ? (
+                {userFollowing.filter((uf) => uf.id === item.id).length ? (
                     <Button type="outline" title={'Following'} />
                 ) : (
                     <Button
@@ -70,7 +72,9 @@ export default function SearchScreen({ navigation }) {
                         loading={isRequestLoading.includes(
                             item.display_username
                         )}
-                        onPress={() => handleFollowPress(item.display_username)}
+                        onPress={() =>
+                            handleFollowPress(item.id, item.display_username)
+                        }
                     />
                 )}
             </ListItem.Content>

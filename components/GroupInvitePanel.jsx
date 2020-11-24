@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { View, Text } from './Themed';
+import React, { useContext, useState } from 'react';
 import {
     ActivityIndicator,
     FlatList,
@@ -16,7 +15,11 @@ import {
 } from 'react-native-elements';
 import { SwipeablePanel } from 'rn-swipeable-panel';
 
+import { View, Text } from './Themed';
 import * as searchApi from '../api/search';
+import GlobalContext from '../utils/context';
+import UsersHorizontalList from './UsersHorizontalList';
+import ListHeader from './ListHeader';
 
 const GroupInvitePanel = ({
     visible,
@@ -29,6 +32,8 @@ const GroupInvitePanel = ({
     const [searched, setSearched] = useState(false);
     const [searchResults, setSearchResults] = useState([]);
     const [query, setQuery] = useState('');
+
+    const { userFollowing } = useContext(GlobalContext);
 
     const closeModal = () => {
         setTimeout(() => {
@@ -104,6 +109,28 @@ const GroupInvitePanel = ({
                         placeholderTextColor={'#737373'}
                         inputStyle={styles.searchInput}
                     />
+                    <UsersHorizontalList
+                        users={userFollowing}
+                        onUserPress={(item) =>
+                            handleInvitePress(item.id, item.display_username)
+                        }
+                        showButtons={false}
+                        header={'Following'}
+                        showConfirmation={true}
+                        itemFooter={(item) => (
+                            <Text style={{ color: '#8e8e8f' }}>
+                                {isRequestLoading.includes(
+                                    item.display_username
+                                )
+                                    ? 'Inviting'
+                                    : invitedUsers.includes(
+                                          item.display_username
+                                      )
+                                    ? 'Invited'
+                                    : ''}
+                            </Text>
+                        )}
+                    />
                     {searching ? (
                         <ActivityIndicator
                             size={'large'}
@@ -111,6 +138,7 @@ const GroupInvitePanel = ({
                         />
                     ) : (
                         <View style={styles.resultsContainer}>
+                            <ListHeader text={'Search Results'} />
                             {searchResults?.users?.length ? (
                                 <FlatList
                                     data={searchResults.users}

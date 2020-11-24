@@ -8,7 +8,7 @@ import useColorScheme from '../hooks/useColorScheme';
 import ExploreScreen from '../screens/ExploreScreen';
 import AppetiteScreen from '../screens/AppetiteScreen';
 import SearchScreen from '../screens/SearchScreen';
-import FriendsScreen from '../screens/FriendsScreen';
+import SocialScreen from '../screens/SocialScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import AppetiteIcon from '../components/AppetiteIcon';
 import SettingsScreen from '../screens/SettingsScreen';
@@ -139,9 +139,9 @@ function TabFourNavigator() {
     return (
         <TabFourStack.Navigator>
             <TabFourStack.Screen
-                name="FriendsScreen"
-                component={FriendsScreen}
-                options={{ headerTitle: 'Friends' }}
+                name="SocialScreen"
+                component={SocialScreen}
+                options={{ headerTitle: 'Social' }}
             />
             <TabFourStack.Screen
                 name="FriendProfile"

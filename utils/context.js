@@ -47,13 +47,17 @@ class State extends React.Component {
             setSkipChooseUsername: () => {
                 this.setState({ skipChooseUsername: true });
             },
-            followUser: async (userDisplayUsername) => {
-                const followRes = await userApi.followUser(userDisplayUsername);
+            followUser: async (userId, userDisplayUsername) => {
+                const followRes = await userApi.followUser(
+                    userId,
+                    userDisplayUsername
+                );
+                console.log('setting user following to ', followRes.following);
                 this.setState({ userFollowing: followRes.following });
             },
-            unfollowUser: async (userDisplayUsername) => {
+            unfollowUser: async (userId) => {
                 const unfollowRes = await userApi.unfollowUser(
-                    userDisplayUsername,
+                    userId,
                     this.state.userFollowing
                 );
                 this.setState({ userFollowing: unfollowRes.following });
@@ -69,6 +73,18 @@ class State extends React.Component {
                 await userApi.respondGroupInvite(groupId, groupName, accept);
                 this.fetchUserInit();
             },
+            leaveGroup: async (groupId) => {
+                const leaveRes = await userApi.leaveGroup(groupId);
+                if (leaveRes.success) {
+                    this.setState({
+                        userGroups: [
+                            ...this.state.userGroups.filter(
+                                (g) => g.id !== groupId
+                            ),
+                        ],
+                    });
+                }
+            },
         };
     }
 
@@ -80,7 +96,7 @@ class State extends React.Component {
 
     async fetchUserInit() {
         const userInit = await userApi.getInitUserInfo();
-        console.log('didnt have oauthuser, now we do!!!!', userInit);
+        console.log('fetched userinit: ', userInit);
         this.setState({
             userInitLoading: false,
             userAppetite: userInit.appetite || [],

@@ -108,13 +108,20 @@ export default function ExploreScreen({ navigation }) {
 
     useEffect(() => {
         // initialize fuse
+        let isMounted = true;
         const searchableCategories = Categories.filter(
             ({ supported_countries }) => !supported_countries.length
         );
 
         fuse = new Fuse(searchableCategories, searchOptions);
 
-        setCategories(getSectionedCategories(selectedFilterOption));
+        if (isMounted) {
+            setCategories(getSectionedCategories(selectedFilterOption));
+        }
+
+        return () => {
+            isMounted = false;
+        };
     }, []);
 
     const updateSearch = (text) => {
