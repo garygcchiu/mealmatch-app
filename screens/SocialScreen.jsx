@@ -8,7 +8,7 @@ import { Icon, ListItem, Badge, Button } from 'react-native-elements';
 import OverlayInputModal from '../components/OverlayInputModal';
 import { SwipeablePanel } from 'rn-swipeable-panel';
 
-function FriendsScreen({ navigation, oAuthUser }) {
+function SocialScreen({ navigation, oAuthUser }) {
     const {
         userFollowing,
         userGroups,
@@ -61,13 +61,15 @@ function FriendsScreen({ navigation, oAuthUser }) {
     }, [navigation, userGroupInvites]);
 
     const renderItem = ({ item, section }) => {
-        const itemTitle = section.title === 'Following' ? item : item.name;
+        const itemTitle =
+            section.title === 'Following' ? item.display_username : item.name;
         const itemOnPress = () => {
             if (section.title === 'Following') {
                 navigation.navigate('Social', {
                     screen: 'FriendProfile',
                     params: {
-                        displayUsername: item,
+                        userId: item.id,
+                        displayUsername: item.display_username,
                     },
                 });
             } else {
@@ -148,31 +150,25 @@ function FriendsScreen({ navigation, oAuthUser }) {
         <ListItem bottomDivider>
             <ListItem.Content style={styles.resultsItem}>
                 <ListItem.Title style={styles.profileItem}>
-                    {item.group_name}
+                    {item.name}
                 </ListItem.Title>
                 <View style={styles.notifButtons}>
                     <Button
                         type="outline"
                         title={'Accept'}
-                        loading={acceptingGroups.includes(item.group_id)}
+                        loading={acceptingGroups.includes(item.id)}
                         onPress={() =>
-                            handleAcceptGroupInvite(
-                                item.group_id,
-                                item.group_name
-                            )
+                            handleAcceptGroupInvite(item.id, item.name)
                         }
                         style={{ marginRight: 14 }}
                     />
                     <Button
                         type="outline"
                         title={'Decline'}
-                        loading={decliningGroups.includes(item.group_id)}
+                        loading={decliningGroups.includes(item.id)}
                         loadingProps={styles.declineGroupInviteButton}
                         onPress={() =>
-                            handleDeclineGroupInvite(
-                                item.group_id,
-                                item.group_name
-                            )
+                            handleDeclineGroupInvite(item.id, item.name)
                         }
                         buttonStyle={styles.declineGroupInviteButton}
                         titleStyle={styles.declineGroupInviteButton}
@@ -204,7 +200,7 @@ function FriendsScreen({ navigation, oAuthUser }) {
         <View style={styles.container}>
             <SectionList
                 sections={sectionData}
-                keyExtractor={(item) => item.id || item}
+                keyExtractor={(item) => item.id || item.display_username}
                 renderItem={renderItem}
                 renderSectionHeader={({ section: { title } }) =>
                     renderSectionHeader(title)
@@ -236,7 +232,7 @@ function FriendsScreen({ navigation, oAuthUser }) {
                         {userGroupInvites.length ? (
                             <FlatList
                                 data={userGroupInvites}
-                                keyExtractor={(item) => item.group_id}
+                                keyExtractor={(item) => item.id}
                                 renderItem={renderGroupInvite}
                                 style={{ width: '100%' }}
                             />
@@ -313,4 +309,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default withOAuth(FriendsScreen);
+export default withOAuth(SocialScreen);
