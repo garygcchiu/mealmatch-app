@@ -8,13 +8,15 @@ export async function editUserInfo(displayUsername) {
     return standardPost('/users/info', { display_username: displayUsername });
 }
 
-export async function followUser(displayUsername) {
-    return standardPost('/users/info', { add_following: [displayUsername] });
+export async function followUser(userId, displayUsername) {
+    return standardPost('/users/info', {
+        add_following: [{ id: userId, display_username: displayUsername }],
+    });
 }
 
-export async function unfollowUser(displayUsername, currentFollowing = []) {
+export async function unfollowUser(userId, currentFollowing = []) {
     return standardPost('/users/info', {
-        set_following: currentFollowing.filter((f) => f !== displayUsername),
+        set_following: currentFollowing.filter((f) => f.id !== userId),
     });
 }
 
@@ -31,5 +33,11 @@ export async function respondGroupInvite(groupId, groupName, accept = false) {
         group_id: groupId,
         group_name: groupName,
         accept: accept,
+    });
+}
+
+export async function leaveGroup(groupId) {
+    return standardPost('/users/groups/leave', {
+        group_id: groupId,
     });
 }
