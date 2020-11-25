@@ -148,9 +148,12 @@ function SocialScreen({ navigation, oAuthUser }) {
     const renderGroupInvite = ({ item }) => (
         <ListItem bottomDivider>
             <ListItem.Content style={styles.resultsItem}>
-                <ListItem.Title style={styles.profileItem}>
-                    {item.name}
-                </ListItem.Title>
+                <View>
+                    <ListItem.Title>{item.name}</ListItem.Title>
+                    <ListItem.Subtitle style={styles.invitedBy}>
+                        Invited By {item.invited_by}
+                    </ListItem.Subtitle>
+                </View>
                 <View style={styles.notifButtons}>
                     <Button
                         type="outline"
@@ -305,6 +308,9 @@ const styles = StyleSheet.create({
     noResultsText: {
         color: '#8e8e8f',
         fontSize: 20,
+    },
+    invitedBy: {
+        color: '#8e8e8f',
     },
 });
 

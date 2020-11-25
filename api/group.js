@@ -12,14 +12,15 @@ export async function getGroupInfo(groupId) {
 }
 
 export async function getGroupMutualAppetite(groupId) {
-    return standardGet('/groups/appetite', { groupId });
+    return standardGet('/groups/mutual-appetite', { groupId });
 }
 
-export async function inviteUserToGroup(userId, groupId, groupName) {
+export async function inviteUserToGroup(userId, groupId, groupName, invitedBy) {
     return standardPost('/groups/invite', {
         user_id: userId,
         group_id: groupId,
         group_name: groupName,
+        invited_by: invitedBy,
     });
 }
 

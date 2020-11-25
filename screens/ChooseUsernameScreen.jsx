@@ -38,20 +38,39 @@ const ChooseUsernameScreen = ({ navigation }) => {
             return;
         }
 
-        // TODO: check dynamoDB if username exists
+        // check dynamoDB if username exists
+        let editRes;
+        try {
+            editRes = await userApi.submitUsername(username);
+            console.log('success? edit res = ', editRes);
 
-        const user = await Auth.currentAuthenticatedUser();
-        const updateUsernameRes = await Auth.updateUserAttributes(user, {
-            'custom:display_username': username,
-        });
+            if (editRes.success) {
+                // success: username valid, create in Cognito
+                const user = await Auth.currentAuthenticatedUser();
+                const updateUsernameRes = await Auth.updateUserAttributes(
+                    user,
+                    {
+                        'custom:display_username': username,
+                    }
+                );
 
-        // refresh cache
-        await Auth.currentAuthenticatedUser({ bypassCache: true });
-        console.log('cache refreshed???');
+                // refresh cache
+                await Auth.currentAuthenticatedUser({ bypassCache: true });
 
-        if (updateUsernameRes === 'SUCCESS') {
-            setSkipChooseUsername();
-            await userApi.editUserInfo(username);
+                if (updateUsernameRes === 'SUCCESS') {
+                    setSkipChooseUsername();
+                }
+            }
+        } catch (err) {
+            if (err.response.data.error === 'USERNAME_EXISTS') {
+                setUsernameError(
+                    'Username already taken, please choose a different username'
+                );
+            } else {
+                setUsernameError(
+                    'Error choosing username, please try again in a bit'
+                );
+            }
         }
     };
 
@@ -106,6 +125,7 @@ const styles = StyleSheet.create({
         borderRadius: 16,
         height: 50,
         width: 100,
+        marginTop: 14,
     },
 });
 

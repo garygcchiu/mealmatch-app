@@ -131,6 +131,7 @@ const GroupInvitePanel = ({
                             </Text>
                         )}
                     />
+                    <ListHeader text={'Search Results'} />
                     {searching ? (
                         <ActivityIndicator
                             size={'large'}
@@ -138,7 +139,6 @@ const GroupInvitePanel = ({
                         />
                     ) : (
                         <View style={styles.resultsContainer}>
-                            <ListHeader text={'Search Results'} />
                             {searchResults?.users?.length ? (
                                 <FlatList
                                     data={searchResults.users}

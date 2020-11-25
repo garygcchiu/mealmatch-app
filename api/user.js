@@ -4,8 +4,10 @@ export async function editAppetite(appetite) {
     return standardPost('/users/appetite', appetite);
 }
 
-export async function editUserInfo(displayUsername) {
-    return standardPost('/users/info', { display_username: displayUsername });
+export async function submitUsername(displayUsername) {
+    return standardPost('/users/submit-username', {
+        display_username: displayUsername,
+    });
 }
 
 export async function followUser(userId, displayUsername) {
