@@ -1,21 +1,19 @@
 import React, { useContext, useEffect, useLayoutEffect, useState } from 'react';
-import {
-    StyleSheet,
-    FlatList,
-    ActivityIndicator,
-    TouchableOpacity,
-} from 'react-native';
+import { StyleSheet, ActivityIndicator } from 'react-native';
 import { withOAuth } from 'aws-amplify-react-native';
 
 import { View, Text } from '../components/Themed';
 import * as groupsAPI from '../api/group';
-import { ListItem, Icon, Avatar, Button, Badge } from 'react-native-elements';
+import { Icon, Button } from 'react-native-elements';
 import GlobalContext from '../utils/context';
 import CompareAppetiteButton from '../components/CompareAppetiteButton';
 import GroupInvitePanel from '../components/GroupInvitePanel';
 import * as groupApi from '../api/group';
 import GroupMemberActions from '../components/GroupMemberActions';
 import UsersHorizontalList from '../components/UsersHorizontalList';
+import { getGroupMutualAppetite } from '../api/group';
+import Categories from '../data/categories';
+import CategoryList from '../components/CategoryList';
 
 function GroupScreen(props) {
     const { navigation, route, oAuthUser } = props;
@@ -31,6 +29,8 @@ function GroupScreen(props) {
     const [selectedGroupMember, setSelectedGroupMember] = useState(null);
     const [isLeavingGroup, setIsLeavingGroup] = useState(false);
     const [isKickingFromGroup, setIsKickingFromGroup] = useState(false);
+    const [loadingCommonAppetite, setLoadingCommonAppetite] = useState(false);
+    const [groupAppetite, setGroupAppetite] = useState([]);
 
     const { userFollowing, leaveGroup } = useContext(GlobalContext);
 
@@ -90,7 +90,12 @@ function GroupScreen(props) {
         setIsRequestLoading([...isRequestLoading, displayUsername]);
 
         try {
-            await groupApi.inviteUserToGroup(userId, groupId, groupInfo.name);
+            await groupApi.inviteUserToGroup(
+                userId,
+                groupId,
+                groupInfo.name,
+                oAuthUser?.attributes?.['custom:display_username'] || ''
+            );
 
             // update loading states
             setIsRequestLoading([
@@ -139,6 +144,28 @@ function GroupScreen(props) {
         setIsKickingFromGroup(false);
         setSelectedGroupMember(null);
         fetchGroupInfo();
+    };
+
+    const handleCompareAppetitePress = async () => {
+        setLoadingCommonAppetite(true);
+        try {
+            const mutualAppetiteRes = await getGroupMutualAppetite(groupId);
+            console.log('mututal appettie res = ', mutualAppetiteRes);
+            setGroupAppetite([
+                {
+                    title: "What You're All Feeling",
+                    data: Categories.filter(
+                        ({ id, supported_countries }) =>
+                            mutualAppetiteRes.includes(id) &&
+                            !supported_countries.length
+                    ),
+                },
+            ]);
+        } catch (err) {
+            console.log('group mutual appetite erro', err);
+        } finally {
+            setLoadingCommonAppetite(false);
+        }
     };
 
     return (
@@ -191,8 +218,20 @@ function GroupScreen(props) {
                         }
                     />
                     <View style={styles.compareAppetiteButton}>
-                        <CompareAppetiteButton handleOnPress={() => {}} />
+                        <CompareAppetiteButton
+                            handleOnPress={handleCompareAppetitePress}
+                            isLoading={loadingCommonAppetite}
+                        />
                     </View>
+                    {groupAppetite && (
+                        <View style={styles.resultsList}>
+                            <CategoryList
+                                categories={groupAppetite}
+                                showClearAllButton={false}
+                                showActionButton={false}
+                            />
+                        </View>
+                    )}
                     <GroupInvitePanel
                         visible={showGroupInvitePanel}
                         handleClose={() => setShowGroupInvitePanel(false)}
@@ -253,5 +292,10 @@ const styles = StyleSheet.create({
     refreshButton: {
         backgroundColor: 'transparent',
         marginRight: 20,
+    },
+    resultsList: {
+        marginTop: 10,
+        width: '100%',
+        height: '100%',
     },
 });
