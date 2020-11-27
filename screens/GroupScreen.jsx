@@ -27,8 +27,6 @@ function GroupScreen(props) {
     const [groupMembers, setGroupMembers] = useState([]);
     const [invitedUsers, setInviteUsers] = useState([]);
     const [selectedGroupMember, setSelectedGroupMember] = useState(null);
-    const [isLeavingGroup, setIsLeavingGroup] = useState(false);
-    const [isKickingFromGroup, setIsKickingFromGroup] = useState(false);
     const [loadingCommonAppetite, setLoadingCommonAppetite] = useState(false);
     const [groupAppetite, setGroupAppetite] = useState([]);
 
@@ -125,11 +123,9 @@ function GroupScreen(props) {
     };
 
     const handleLeaveGroup = async () => {
-        setIsLeavingGroup(true);
         await leaveGroup(groupId);
 
         // update state
-        setIsLeavingGroup(false);
         setSelectedGroupMember(null);
         navigation.navigate('Social', {
             screen: 'SocialScreen',
@@ -137,11 +133,9 @@ function GroupScreen(props) {
     };
 
     const handleKickUser = async (userId) => {
-        setIsKickingFromGroup(true);
         await groupApi.kickUserFromGroup(userId, groupId);
 
         // update state
-        setIsKickingFromGroup(false);
         setSelectedGroupMember(null);
         fetchGroupInfo();
     };
@@ -248,8 +242,6 @@ function GroupScreen(props) {
                         isCurrentUserAdmin={isUserAdmin}
                         handleKickUser={handleKickUser}
                         handleLeaveGroup={handleLeaveGroup}
-                        isLeavingGroup={isLeavingGroup}
-                        isKickingFromGroup={isKickingFromGroup}
                     />
                 </View>
             )}

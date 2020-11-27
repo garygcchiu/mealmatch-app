@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Modal, StyleSheet } from 'react-native';
+import { Alert, Modal, StyleSheet } from 'react-native';
 import { Button } from 'react-native-elements';
 import { SwipeablePanel } from 'rn-swipeable-panel';
 import { withOAuth } from 'aws-amplify-react-native';
 
 import { View, Text } from './Themed';
-import OverlayModal from './OverlayModal';
 
 const GroupMemberActions = ({
     visible,
@@ -17,16 +16,47 @@ const GroupMemberActions = ({
     isCurrentUserAdmin,
     handleKickUser,
     handleLeaveGroup,
-    isLeavingGroup,
-    isKickingFromGroup,
 }) => {
-    const [showLeaveGroupModal, setShowLeaveGroupModal] = useState(false);
-    const [showKickMemberModal, setShowKickMemberModal] = useState(false);
-
     const closeModal = () => {
         setTimeout(() => {
             handleClose();
         }, 200);
+    };
+
+    const showLeaveGroupAlert = () => {
+        Alert.alert(
+            'Leave Group',
+            `Are you sure you want to leave this group? ${
+                isCurrentUserAdmin
+                    ? 'As the administrator, if you leave the group, the group will be deleted.'
+                    : ''
+            }`,
+            [
+                {
+                    text: 'No',
+                    onPress: () => {},
+                    style: 'cancel',
+                },
+                { text: 'Yes', onPress: () => handleLeaveGroup() },
+            ],
+            { cancelable: true }
+        );
+    };
+
+    const showRemoveUserFromGroupAlert = () => {
+        Alert.alert(
+            'Remove User',
+            `Are you sure you want to remove ${member.display_username} from the group?`,
+            [
+                {
+                    text: 'No',
+                    onPress: () => {},
+                    style: 'cancel',
+                },
+                { text: 'Yes', onPress: () => handleKickUser(member.id) },
+            ],
+            { cancelable: true }
+        );
     };
 
     return (
@@ -71,7 +101,9 @@ const GroupMemberActions = ({
                                     type="outline"
                                     title={'Remove User From Group'}
                                     loading={isRequestLoading}
-                                    onPress={() => setShowKickMemberModal(true)}
+                                    onPress={() =>
+                                        showRemoveUserFromGroupAlert()
+                                    }
                                     containerStyle={styles.kickButton}
                                     buttonStyle={styles.leaveGroup}
                                     titleStyle={styles.leaveGroup}
@@ -84,36 +116,11 @@ const GroupMemberActions = ({
                             type="outline"
                             title={'Leave Group'}
                             loading={isRequestLoading}
-                            onPress={() => setShowLeaveGroupModal(true)}
+                            onPress={() => showLeaveGroupAlert()}
                             buttonStyle={styles.leaveGroup}
                             titleStyle={styles.leaveGroup}
                         />
                     )}
-                    <OverlayModal
-                        title={'Leave Group'}
-                        description={`Are you sure you want to leave this group? ${
-                            isCurrentUserAdmin
-                                ? 'As the administrator, if you leave the group, the group will be deleted.'
-                                : ''
-                        }`}
-                        showOverlay={showLeaveGroupModal}
-                        onCancelPress={() => setShowLeaveGroupModal(false)}
-                        onBackdropPress={() => setShowLeaveGroupModal(false)}
-                        onConfirmPress={handleLeaveGroup}
-                        isConfirmButtonLoading={isLeavingGroup}
-                    />
-                    <OverlayModal
-                        title={'Remove Member'}
-                        description={`Are you sure you want to remove ${member.display_username} from the group?`}
-                        showOverlay={showKickMemberModal}
-                        onCancelPress={() => setShowKickMemberModal(false)}
-                        onBackdropPress={() => setShowKickMemberModal(false)}
-                        onConfirmPress={async () => {
-                            await handleKickUser(member.id);
-                            setShowKickMemberModal(false);
-                        }}
-                        isConfirmButtonLoading={isKickingFromGroup}
-                    />
                 </View>
             </SwipeablePanel>
         </Modal>

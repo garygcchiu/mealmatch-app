@@ -1,16 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { Alert, StyleSheet } from 'react-native';
 
 import Categories from '../data/categories';
 import { View } from '../components/Themed';
 import GlobalContext from '../utils/context';
 import CategoryList from '../components/CategoryList';
-import OverlayModal from '../components/OverlayModal';
 
 export default function AppetiteScreen() {
     const { userAppetite, clearUserAppetite } = useContext(GlobalContext);
     const [displayAppetite, setDisplayAppetite] = useState([]);
-    const [showClearOverlay, setShowClearOverlay] = useState(false);
 
     useEffect(() => {
         setDisplayAppetite([
@@ -23,25 +21,28 @@ export default function AppetiteScreen() {
         ]);
     }, [userAppetite]);
 
+    const createConfirmationAlert = () => {
+        Alert.alert(
+            'Confirmation',
+            'This will clear all categories from your appetite list. Are you sure?',
+            [
+                {
+                    text: 'No',
+                    onPress: () => {},
+                    style: 'cancel',
+                },
+                { text: 'Yes', onPress: () => clearUserAppetite() },
+            ],
+            { cancelable: true }
+        );
+    };
+
     return (
         <View style={styles.container}>
             <CategoryList
                 categories={displayAppetite}
                 showClearAllButton
-                onClearAllButtonPress={() => setShowClearOverlay(true)}
-            />
-            <OverlayModal
-                title={'Confirmation'}
-                onBackdropPress={() => setShowClearOverlay(false)}
-                onCancelPress={() => setShowClearOverlay(false)}
-                onConfirmPress={() => {
-                    clearUserAppetite();
-                    setShowClearOverlay(false);
-                }}
-                description={
-                    'This will clear all categories from your appetite list. Are you sure?'
-                }
-                showOverlay={showClearOverlay}
+                onClearAllButtonPress={() => createConfirmationAlert()}
             />
         </View>
     );

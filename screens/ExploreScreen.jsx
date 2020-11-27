@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { StyleSheet, SafeAreaView, Dimensions } from 'react-native';
+import { StyleSheet, SafeAreaView, Alert } from 'react-native';
 import Fuse from 'fuse.js';
-import { SearchBar, Button, Icon, Overlay } from 'react-native-elements';
+import { SearchBar, Button, Icon } from 'react-native-elements';
 
 import useColorScheme from '../hooks/useColorScheme';
 import Categories from '../data/categories';
@@ -10,7 +10,6 @@ import { View, Text } from '../components/Themed';
 import GlobalContext from '../utils/context';
 import ExploreFilter from '../components/ExploreFilter';
 import { filterMap } from '../data/filterOptions';
-import OverlayModal from '../components/OverlayModal';
 import ClearAppetiteButton from '../components/ClearAppetiteButton';
 
 const searchOptions = {
@@ -28,7 +27,6 @@ export default function ExploreScreen({ navigation }) {
     const [searchTerm, setSearchTerm] = useState('');
     const [categories, setCategories] = useState([]);
     const [showFilter, setShowFilter] = useState(false);
-    const [showClearOverlay, setShowClearOverlay] = useState(false);
     const [selectedFilterOption, setSelectedFilterOption] = useState(
         filterMap.POPULAR
     );
@@ -143,6 +141,22 @@ export default function ExploreScreen({ navigation }) {
         setSelectedFilterOption(option);
     };
 
+    const createConfirmationAlert = () => {
+        Alert.alert(
+            'Confirmation',
+            'This will clear all categories from your appetite list. Are you sure?',
+            [
+                {
+                    text: 'No',
+                    onPress: () => {},
+                    style: 'cancel',
+                },
+                { text: 'Yes', onPress: () => clearUserAppetite() },
+            ],
+            { cancelable: true }
+        );
+    };
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.container}>
@@ -176,7 +190,7 @@ export default function ExploreScreen({ navigation }) {
                         onPress={() => setShowFilter(true)}
                     />
                     <ClearAppetiteButton
-                        onButtonPress={() => setShowClearOverlay(true)}
+                        onButtonPress={() => createConfirmationAlert()}
                     />
                 </View>
                 <CategoryList categories={categories} />
@@ -185,19 +199,6 @@ export default function ExploreScreen({ navigation }) {
                     handleClose={() => setShowFilter(false)}
                     selectedOption={selectedFilterOption}
                     handleOptionPress={(option) => handleFilterChange(option)}
-                />
-                <OverlayModal
-                    title={'Confirmation'}
-                    onBackdropPress={() => setShowClearOverlay(false)}
-                    onCancelPress={() => setShowClearOverlay(false)}
-                    onConfirmPress={() => {
-                        clearUserAppetite();
-                        setShowClearOverlay(false);
-                    }}
-                    description={
-                        'This will clear all categories from your appetite list. Are you sure?'
-                    }
-                    showOverlay={showClearOverlay}
                 />
             </View>
         </SafeAreaView>
