@@ -145,8 +145,8 @@ function SocialScreen({ navigation, oAuthUser }) {
         setDecliningGroups([...decliningGroups.filter((g) => g !== groupId)]);
     };
 
-    const renderGroupInvite = ({ item }) => (
-        <ListItem bottomDivider>
+    const renderGroupInvite = (item) => (
+        <ListItem bottomDivider key={item.id}>
             <ListItem.Content style={styles.resultsItem}>
                 <View>
                     <ListItem.Title>{item.name}</ListItem.Title>
@@ -232,12 +232,9 @@ function SocialScreen({ navigation, oAuthUser }) {
                 >
                     <View>
                         {userGroupInvites.length ? (
-                            <FlatList
-                                data={userGroupInvites}
-                                keyExtractor={(item) => item.id}
-                                renderItem={renderGroupInvite}
-                                style={{ width: '100%' }}
-                            />
+                            userGroupInvites.map((item) =>
+                                renderGroupInvite(item)
+                            )
                         ) : (
                             <View style={styles.noResultsContainer}>
                                 <Text style={styles.noResultsText}>
@@ -298,16 +295,6 @@ const styles = StyleSheet.create({
         color: '#8e8e8f',
         paddingLeft: 14,
         marginTop: 16,
-    },
-    noResultsContainer: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100%',
-        marginTop: 14,
-    },
-    noResultsText: {
-        color: '#8e8e8f',
-        fontSize: 20,
     },
     invitedBy: {
         color: '#8e8e8f',

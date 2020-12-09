@@ -18,15 +18,17 @@ function UsersHorizontalList({
                 style={styles.groupMemberContainer}
                 onPress={() => onUserPress(item)}
             >
-                <Avatar
-                    size={'medium'}
-                    icon={{ name: 'user', type: 'font-awesome' }}
-                    rounded
-                    containerStyle={styles.avatarContainer}
-                />
-                {item.is_admin && (
-                    <Badge value={'A'} containerStyle={styles.adminBadge} />
-                )}
+                <View>
+                    <Avatar
+                        size={'medium'}
+                        icon={{ name: 'user', type: 'font-awesome' }}
+                        rounded
+                        containerStyle={styles.avatarContainer}
+                    />
+                    {item.is_admin && (
+                        <Badge value={'A'} containerStyle={styles.adminBadge} />
+                    )}
+                </View>
                 <Text style={styles.memberText}>
                     @{item.display_username}
                     {'\n'}
@@ -77,7 +79,7 @@ const styles = StyleSheet.create({
     adminBadge: {
         position: 'absolute',
         top: 0,
-        right: 4,
+        right: -4,
     },
 });
 

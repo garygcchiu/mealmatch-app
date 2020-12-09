@@ -6,7 +6,7 @@ import { SearchBar, Button, Icon } from 'react-native-elements';
 import useColorScheme from '../hooks/useColorScheme';
 import Categories from '../data/categories';
 import CategoryList from '../components/CategoryList';
-import { View, Text } from '../components/Themed';
+import { View } from '../components/Themed';
 import GlobalContext from '../utils/context';
 import ExploreFilter from '../components/ExploreFilter';
 import { filterMap } from '../data/filterOptions';

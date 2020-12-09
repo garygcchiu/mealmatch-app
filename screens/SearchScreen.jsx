@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useLayoutEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet } from 'react-native';
 
 import * as searchApi from '../api/search';
@@ -6,6 +6,7 @@ import { View, Text } from '../components/Themed';
 import { ListItem, SearchBar, Button } from 'react-native-elements';
 import GlobalContext from '../utils/context';
 import ListHeader from '../components/ListHeader';
+import Loader from '../components/Loader';
 
 export default function SearchScreen({ navigation }) {
     const [query, setQuery] = useState('');
@@ -98,9 +99,11 @@ export default function SearchScreen({ navigation }) {
                 placeholderTextColor={'#737373'}
                 inputStyle={styles.searchInput}
             />
-            {searching ? (
-                <ActivityIndicator size={'large'} style={{ height: '80%' }} />
-            ) : (
+            <Loader
+                loading={searching}
+                noResults={searchResults?.users?.length === 0}
+                noResultsMessage={'No Results Found'}
+            >
                 <View style={styles.resultsContainer}>
                     {searchResults?.users?.length ? (
                         <FlatList
@@ -119,7 +122,7 @@ export default function SearchScreen({ navigation }) {
                         )
                     )}
                 </View>
-            )}
+            </Loader>
         </View>
     );
 }

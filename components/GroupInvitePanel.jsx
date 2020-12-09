@@ -62,7 +62,7 @@ const GroupInvitePanel = ({
         setQuery(newValue);
     };
 
-    const renderUserItem = ({ item }) => (
+    const renderUserItem = (item) => (
         <ListItem bottomDivider key={item.id}>
             <ListItem.Content style={styles.resultsItem}>
                 <ListItem.Title style={styles.profileItem}>
@@ -139,22 +139,17 @@ const GroupInvitePanel = ({
                         />
                     ) : (
                         <View style={styles.resultsContainer}>
-                            {searchResults?.users?.length ? (
-                                <FlatList
-                                    data={searchResults.users}
-                                    keyExtractor={(item) => item.id}
-                                    renderItem={renderUserItem}
-                                    style={{ width: '100%' }}
-                                />
-                            ) : (
-                                searched && (
-                                    <View style={styles.noResultsContainer}>
-                                        <Text style={styles.noResultsText}>
-                                            No Results Found
-                                        </Text>
-                                    </View>
-                                )
-                            )}
+                            {searchResults?.users?.length
+                                ? searchResults?.users?.map((item) =>
+                                      renderUserItem(item)
+                                  )
+                                : searched && (
+                                      <View style={styles.noResultsContainer}>
+                                          <Text style={styles.noResultsText}>
+                                              No Results Found
+                                          </Text>
+                                      </View>
+                                  )}
                         </View>
                     )}
                 </View>
@@ -204,7 +199,7 @@ const styles = StyleSheet.create({
     noResultsContainer: {
         justifyContent: 'center',
         alignItems: 'center',
-        height: '90%',
+        paddingTop: 200,
     },
     noResultsText: {
         color: '#8e8e8f',

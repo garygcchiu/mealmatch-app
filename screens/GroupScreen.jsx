@@ -14,6 +14,7 @@ import UsersHorizontalList from '../components/UsersHorizontalList';
 import { getGroupMutualAppetite } from '../api/group';
 import Categories from '../data/categories';
 import CategoryList from '../components/CategoryList';
+import Loader from '../components/Loader';
 
 function GroupScreen(props) {
     const { navigation, route, oAuthUser } = props;
@@ -164,9 +165,7 @@ function GroupScreen(props) {
 
     return (
         <View style={styles.container}>
-            {loadingGroupInfo ? (
-                <ActivityIndicator size={'large'} style={{ height: '85%' }} />
-            ) : (
+            <Loader loading={loadingGroupInfo}>
                 <View style={styles.groupInfoContainer}>
                     <Text style={styles.groupName}>{groupInfo.name}</Text>
                     <UsersHorizontalList
@@ -244,7 +243,7 @@ function GroupScreen(props) {
                         handleLeaveGroup={handleLeaveGroup}
                     />
                 </View>
-            )}
+            </Loader>
         </View>
     );
 }
