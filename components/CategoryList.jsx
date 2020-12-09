@@ -38,6 +38,7 @@ const CategoryList = ({
             <CategoryCard
                 title={item.name}
                 image={item.image}
+                categoryId={item.id}
                 isInAppetite={isInAppetite}
                 onActionButtonPress={() => handleActionButtonPress(item.id)}
                 isLoading={isItemLoading.includes(item.id)}

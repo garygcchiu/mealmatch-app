@@ -10,6 +10,7 @@ import { Linking, Platform } from 'react-native';
 import Amplify from 'aws-amplify';
 import awsconfig from './aws-exports';
 import { GlobalProvider } from './utils/context';
+import GlobalModals from './components/GlobalModals';
 
 async function urlOpener(url, redirectUrl) {
     const { type, url: newUrl } = await WebBrowser.openAuthSessionAsync(
@@ -61,6 +62,7 @@ function App() {
             <GlobalProvider>
                 <Navigation colorScheme={colorScheme} />
                 <StatusBar />
+                <GlobalModals />
             </GlobalProvider>
         </SafeAreaProvider>
     );

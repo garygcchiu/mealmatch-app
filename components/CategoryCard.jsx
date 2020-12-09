@@ -5,9 +5,10 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import { Text, View } from './Themed';
-import React from 'react';
+import React, { useContext } from 'react';
 import { Icon } from 'react-native-elements';
 import AppetiteToggleButton from './AppetiteToggleButton';
+import GlobalContext from '../utils/context';
 
 const cardLength = Dimensions.get('window').width - 20;
 
@@ -32,14 +33,20 @@ const getItemTitle = (title) => {
 export default function CategoryCard({
     title,
     image,
+    categoryId,
     isInAppetite = false,
     onActionButtonPress,
     isLoading,
     showActionButton,
 }) {
+    const { setSelectedCategoryId } = useContext(GlobalContext);
+
     return (
         <View style={styles.container}>
-            <TouchableOpacity activeOpacity={0.5}>
+            <TouchableOpacity
+                activeOpacity={0.5}
+                onPress={() => setSelectedCategoryId(categoryId)}
+            >
                 <ImageBackground
                     source={image}
                     style={styles.imageBackgroundContainer}

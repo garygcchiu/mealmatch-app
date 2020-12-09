@@ -85,6 +85,10 @@ class State extends React.Component {
                     });
                 }
             },
+            selectedCategoryId: '',
+            setSelectedCategoryId: (categoryId) => {
+                this.setState({ selectedCategoryId: categoryId });
+            },
         };
     }
 
@@ -95,15 +99,19 @@ class State extends React.Component {
     }
 
     async fetchUserInit() {
-        const userInit = await userApi.getInitUserInfo();
-        console.log('fetched userinit: ', userInit);
-        this.setState({
-            userInitLoading: false,
-            userAppetite: userInit.appetite || [],
-            userFollowing: userInit.following || [],
-            userGroups: userInit.groups || [],
-            userGroupInvites: userInit.group_invites || [],
-        });
+        try {
+            const userInit = await userApi.getInitUserInfo();
+            console.log('fetched userinit: ', userInit);
+            this.setState({
+                userInitLoading: false,
+                userAppetite: userInit.appetite || [],
+                userFollowing: userInit.following || [],
+                userGroups: userInit.groups || [],
+                userGroupInvites: userInit.group_invites || [],
+            });
+        } catch (err) {
+            console.error('error receiving user init info: ', err);
+        }
     }
 
     render() {
