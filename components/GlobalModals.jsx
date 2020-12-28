@@ -5,14 +5,10 @@ import CategoryRestaurantsModal from './CategoryRestaurantsModal';
 
 export default function GlobalModals() {
     return (
-        <View style={styles.container}>
+        <View>
             <CategoryRestaurantsModal />
         </View>
     );
 }
 
-const styles = StyleSheet.create({
-    container: {
-        position: 'absolute',
-    },
-});
+const styles = StyleSheet.create({});

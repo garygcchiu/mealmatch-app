@@ -86,13 +86,14 @@ const GroupInvitePanel = ({
     );
 
     return (
-        <Modal visible={visible} animationType={'fade'} transparent={true}>
+        <Modal transparent={true} visible={visible} animationType={'fade'}>
             <SwipeablePanel
                 isActive={visible}
                 onClose={closeModal}
                 fullWidth={true}
                 closeOnTouchOutside={true}
                 openLarge={true}
+                onlyLarge={true}
             >
                 <View>
                     <SearchBar

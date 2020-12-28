@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useLayoutEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, SafeAreaView } from 'react-native';
 import { withOAuth } from 'aws-amplify-react-native';
 
 import { View, Text } from '../components/Themed';
@@ -164,7 +164,7 @@ function GroupScreen(props) {
     };
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <Loader loading={loadingGroupInfo}>
                 <View style={styles.groupInfoContainer}>
                     <Text style={styles.groupName}>{groupInfo.name}</Text>
@@ -244,7 +244,7 @@ function GroupScreen(props) {
                     />
                 </View>
             </Loader>
-        </View>
+        </SafeAreaView>
     );
 }
 

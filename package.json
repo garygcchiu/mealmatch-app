@@ -47,7 +47,7 @@
     "react-native-screens": "~2.10.1",
     "react-native-svg": "12.1.0",
     "react-native-web": "~0.13.12",
-    "rn-swipeable-panel": "^1.2.3"
+    "rn-swipeable-panel": "^1.2.5"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",

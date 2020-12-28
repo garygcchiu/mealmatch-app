@@ -13,7 +13,7 @@ export default function Loader({
         return (
             <ActivityIndicator
                 size={'large'}
-                style={[{ height: '80%' }, loaderContainerStyle]}
+                style={[styles.activityIndicator, loaderContainerStyle]}
             />
         );
     }
@@ -36,5 +36,8 @@ const styles = StyleSheet.create({
     noResultsText: {
         color: '#8e8e8f',
         fontSize: 20,
+    },
+    activityIndicator: {
+        height: '80%',
     },
 });

@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Modal, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import GlobalContext from '../utils/context';
 import { SwipeablePanel } from 'rn-swipeable-panel';
-import { Text, View } from './Themed';
+import { View } from './Themed';
 import Loader from './Loader';
 import * as categoriesApi from '../api/categories';
 import RestaurantList from './RestaurantList';
@@ -15,12 +15,10 @@ export default function CategoryRestaurantsModal({ navigation }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        console.log('category modal!!!');
         (async () => {
             if (!!selectedCategoryId) {
                 try {
                     setLoading(true);
-                    console.log('fetching????');
                     const res = await categoriesApi.getCategoryRestaurants(
                         selectedCategoryId
                     );
@@ -36,29 +34,24 @@ export default function CategoryRestaurantsModal({ navigation }) {
     }, [selectedCategoryId]);
 
     return (
-        <Modal
-            visible={!!selectedCategoryId}
-            animationType={'fade'}
-            transparent={true}
+        <SwipeablePanel
+            isActive={!!selectedCategoryId}
+            onClose={() => setSelectedCategoryId('')}
+            fullWidth={true}
+            closeOnTouchOutside={true}
+            openLarge={true}
+            onlyLarge={true}
+            showCloseButton={true}
         >
-            <SwipeablePanel
-                isActive={!!selectedCategoryId}
-                onClose={() => setSelectedCategoryId('')}
-                fullWidth={true}
-                closeOnTouchOutside={true}
-                openLarge={true}
-                showCloseButton={true}
-            >
-                <View style={styles.content}>
-                    <Loader
-                        loading={loading}
-                        loaderContainerStyle={{ marginTop: 150 }}
-                    >
-                        <RestaurantList data={foursquareData} />
-                    </Loader>
-                </View>
-            </SwipeablePanel>
-        </Modal>
+            <View style={styles.content}>
+                <Loader
+                    loading={loading}
+                    loaderContainerStyle={{ marginTop: 150 }}
+                >
+                    <RestaurantList data={foursquareData} />
+                </Loader>
+            </View>
+        </SwipeablePanel>
     );
 }
 
