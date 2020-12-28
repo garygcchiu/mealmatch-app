@@ -30,6 +30,7 @@ export default function RestaurantListItem({
                             title={'Maps'}
                             name={'map-marker-alt'}
                             type={'font-awesome-5'}
+                            size={20}
                         />
                     }
                     onPress={() =>
@@ -41,7 +42,7 @@ export default function RestaurantListItem({
                     }
                     buttonStyle={styles.linksButtonContainer}
                 />
-                {true && (
+                {showUberButton && (
                     <Button
                         icon={<Icon name={'uber'} type={'font-awesome-5'} />}
                         buttonStyle={styles.linksButtonContainer}
