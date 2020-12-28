@@ -19,7 +19,7 @@ const ExploreFilter = ({
     };
 
     return (
-        <Modal visible={visible} animated={false} transparent={true}>
+        <Modal visible={visible} animationType={'fade'} transparent={true}>
             <SwipeablePanel
                 isActive={visible}
                 onClose={closeModal}

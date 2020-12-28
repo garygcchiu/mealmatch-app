@@ -220,7 +220,7 @@ function SocialScreen({ navigation, oAuthUser }) {
             />
             <Modal
                 visible={showNotificationsPanel}
-                animated={false}
+                animationType={'fade'}
                 transparent={true}
             >
                 <SwipeablePanel

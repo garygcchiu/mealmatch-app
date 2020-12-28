@@ -38,7 +38,7 @@ export default function CategoryRestaurantsModal({ navigation }) {
     return (
         <Modal
             visible={!!selectedCategoryId}
-            animated={true}
+            animationType={'fade'}
             transparent={true}
         >
             <SwipeablePanel
