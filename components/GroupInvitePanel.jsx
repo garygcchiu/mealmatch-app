@@ -1,18 +1,6 @@
 import React, { useContext, useState } from 'react';
-import {
-    ActivityIndicator,
-    FlatList,
-    Modal,
-    StyleSheet,
-    SafeAreaView,
-} from 'react-native';
-import {
-    ListItem,
-    Badge,
-    Divider,
-    SearchBar,
-    Button,
-} from 'react-native-elements';
+import { ActivityIndicator, Modal, StyleSheet } from 'react-native';
+import { ListItem, SearchBar, Button } from 'react-native-elements';
 import { SwipeablePanel } from 'rn-swipeable-panel';
 
 import { View, Text } from './Themed';

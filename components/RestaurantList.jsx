@@ -1,14 +1,20 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, Image } from 'react-native';
-import Categories from '../data/categories';
+import * as Linking from 'expo-linking';
 
+import Categories from '../data/categories';
 import { Text, View } from './Themed';
 import GlobalContext from '../utils/context';
 import RestaurantListItem from './RestaurantListItem';
 
 export default function RestaurantList({ data }) {
     const { selectedCategoryId } = useContext(GlobalContext);
+    const [canOpenUber, setCanOpenUber] = useState(true);
     const categoryName = getPrimaryCategoryInData(data, selectedCategoryId);
+
+    useEffect(() => {
+        Linking.canOpenURL('uber://').then((res) => setCanOpenUber(res));
+    }, []);
 
     return (
         <View>
@@ -24,15 +30,22 @@ export default function RestaurantList({ data }) {
                     {group.items.map((item) => (
                         <RestaurantListItem
                             name={item.venue.name}
-                            reason={item.reasons.items[0].summary}
-                            id={item.venue.id}
                             formattedAddress={
                                 item.venue.location.formattedAddress
                             }
+                            key={item.venue.id}
+                            latitude={item.venue.location.lat}
+                            longitude={item.venue.location.lng}
+                            showUberButton={canOpenUber}
                         />
                     ))}
                 </View>
             ))}
+            <View style={styles.foursquareContainer}>
+                <Text style={styles.foursquareText}>
+                    Data obtained from Foursquare.com
+                </Text>
+            </View>
         </View>
     );
 }
@@ -65,5 +78,14 @@ const styles = StyleSheet.create({
     categoryHeaderText: {
         fontSize: 20,
         fontWeight: 'bold',
+        marginBottom: 14,
+    },
+    foursquareContainer: {
+        height: 80,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    foursquareText: {
+        color: 'rgba(0, 0, 0, 0.5)',
     },
 });

@@ -19,7 +19,16 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "LSApplicationQueriesSchemes": [
+          "comgooglemaps",
+          "citymapper",
+          "uber",
+          "lyft",
+          "waze"
+        ]
+      }
     },
     "android": {
       "adaptiveIcon": {
