@@ -11,6 +11,7 @@ import GlobalContext from '../utils/context';
 import ExploreFilter from '../components/ExploreFilter';
 import { filterMap } from '../data/filterOptions';
 import ClearAppetiteButton from '../components/ClearAppetiteButton';
+import { getCurrentLocation } from '../utils/location';
 
 const searchOptions = {
     includeScore: true,
@@ -116,6 +117,11 @@ export default function ExploreScreen({ navigation }) {
         if (isMounted) {
             setCategories(getSectionedCategories(selectedFilterOption));
         }
+
+        // attempt to get user location
+        getCurrentLocation().then((lng, lat) =>
+            console.log('got user location = ', lng + ',' + lat)
+        );
 
         return () => {
             isMounted = false;

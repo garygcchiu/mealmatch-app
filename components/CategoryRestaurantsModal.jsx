@@ -6,6 +6,7 @@ import { View } from './Themed';
 import Loader from './Loader';
 import * as categoriesApi from '../api/categories';
 import RestaurantList from './RestaurantList';
+import { getCurrentLocation } from '../utils/location';
 
 export default function CategoryRestaurantsModal({ navigation }) {
     const { selectedCategoryId, setSelectedCategoryId } = useContext(
@@ -17,12 +18,19 @@ export default function CategoryRestaurantsModal({ navigation }) {
     useEffect(() => {
         (async () => {
             if (!!selectedCategoryId) {
+                // try to get location
+                const { latitude, longitude } = await getCurrentLocation();
+                if (!latitude || !longitude) {
+                    return;
+                }
+
                 try {
                     setLoading(true);
                     const res = await categoriesApi.getCategoryRestaurants(
-                        selectedCategoryId
+                        selectedCategoryId,
+                        latitude,
+                        longitude
                     );
-                    console.log('res = ', res);
                     setFoursquareData(res.response);
                 } catch (err) {
                     console.log('getCategoryRestaurants error: ', err);
