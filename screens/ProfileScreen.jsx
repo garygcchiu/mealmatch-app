@@ -1,15 +1,17 @@
-import React, { useContext } from 'react';
+import React, { useContext, useLayoutEffect, useState } from 'react';
+import { ListItem } from 'react-native-elements';
 import { StyleSheet, SectionList } from 'react-native';
 import { withOAuth } from 'aws-amplify-react-native';
+import * as Progress from 'expo-progress';
 
 import { View } from '../components/Themed';
-import { useLayoutEffect } from 'react';
-import { ListItem, Avatar } from 'react-native-elements';
 import GlobalContext from '../utils/context';
+import UserAvatar from '../components/UserAvatar';
 
 function ProfileScreen(props) {
     const { oAuthUser, navigation } = props;
     const { signOut } = useContext(GlobalContext);
+    const [isAvatarUpdating, setIsAvatarUpdating] = useState(false);
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -88,12 +90,24 @@ function ProfileScreen(props) {
 
     return (
         <View style={styles.container}>
-            <Avatar
+            <UserAvatar
                 size={'large'}
-                icon={{ name: 'user', type: 'font-awesome' }}
-                rounded
-                containerStyle={styles.avatarContainer}
+                username={oAuthUser?.attributes?.['custom:display_username']}
+                showEdit={true}
+                editSize={25}
+                avatarUpdateCallback={(isUpdating) =>
+                    setIsAvatarUpdating(isUpdating)
+                }
+                style={{ marginBottom: 18 }}
             />
+            {isAvatarUpdating && (
+                <Progress.Bar
+                    isIndeterminate={true}
+                    color={'orange'}
+                    borderRadius={2}
+                    height={2}
+                />
+            )}
             <SectionList
                 sections={PROFILE_ITEMS}
                 renderItem={renderItem}
@@ -116,10 +130,6 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignSelf: 'stretch',
         paddingTop: '5%',
-    },
-    avatarContainer: {
-        backgroundColor: '#cecece',
-        marginBottom: 24,
     },
     profileItem: {
         color: 'black',

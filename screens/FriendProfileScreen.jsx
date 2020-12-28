@@ -1,6 +1,6 @@
-import React, { useState, useLayoutEffect, useContext } from 'react';
+import React, { useState, useLayoutEffect, useContext, useEffect } from 'react';
 import { StyleSheet, ActivityIndicator, Alert } from 'react-native';
-import { Avatar, Button } from 'react-native-elements';
+import { Button } from 'react-native-elements';
 import { withOAuth } from 'aws-amplify-react-native';
 
 import { View, Text } from '../components/Themed';
@@ -9,6 +9,7 @@ import CategoryList from '../components/CategoryList';
 import Categories from '../data/categories';
 import GlobalContext from '../utils/context';
 import CompareAppetiteButton from '../components/CompareAppetiteButton';
+import UserAvatar from '../components/UserAvatar';
 
 function FriendProfileScreen(props) {
     const { navigation, route, oAuthUser } = props;
@@ -78,12 +79,7 @@ function FriendProfileScreen(props) {
 
     return (
         <View style={styles.container}>
-            <Avatar
-                size={'large'}
-                icon={{ name: 'user', type: 'font-awesome' }}
-                rounded
-                containerStyle={styles.avatarContainer}
-            />
+            <UserAvatar size={'large'} username={displayUsername} />
             <Text style={styles.username}>@{displayUsername}</Text>
             <Button
                 type="outline"
@@ -120,10 +116,6 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignSelf: 'stretch',
         paddingTop: '5%',
-    },
-    avatarContainer: {
-        backgroundColor: '#cecece',
-        marginBottom: 6,
     },
     username: {
         fontSize: 16,

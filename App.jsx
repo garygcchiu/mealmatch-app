@@ -47,6 +47,12 @@ Amplify.configure({
             },
         ],
     },
+    Storage: {
+        AWSS3: {
+            bucket: 'mealmatch-assets',
+            region: 'us-east-1',
+        },
+    },
 });
 
 function App() {

@@ -1,8 +1,10 @@
 import React from 'react';
 import { StyleSheet, FlatList, TouchableOpacity } from 'react-native';
-import { Avatar, Badge } from 'react-native-elements';
+import { Badge } from 'react-native-elements';
+
 import { Text, View } from './Themed';
 import ListHeader from './ListHeader';
+import UserAvatar from './UserAvatar';
 
 function UsersHorizontalList({
     users,
@@ -19,11 +21,9 @@ function UsersHorizontalList({
                 onPress={() => onUserPress(item)}
             >
                 <View>
-                    <Avatar
+                    <UserAvatar
                         size={'medium'}
-                        icon={{ name: 'user', type: 'font-awesome' }}
-                        rounded
-                        containerStyle={styles.avatarContainer}
+                        username={item.display_username}
                     />
                     {item.is_admin && (
                         <Badge value={'A'} containerStyle={styles.adminBadge} />
@@ -59,10 +59,6 @@ const styles = StyleSheet.create({
     container: {
         width: '100%',
         marginBottom: 14,
-    },
-    avatarContainer: {
-        backgroundColor: '#cecece',
-        marginBottom: 8,
     },
     groupMemberContainer: {
         justifyContent: 'center',
