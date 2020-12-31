@@ -25,7 +25,7 @@ const ExploreFilter = ({
             fullWidth={true}
             onlySmall={true}
             closeOnTouchOutside={true}
-            noBackgroundOpacity={true}
+            // noBackgroundOpacity={true}
         >
             <View>
                 <Text style={styles.sortText}>Sort</Text>

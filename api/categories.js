@@ -4,8 +4,12 @@ async function getExplore() {
     return standardGet(`/categories/explore`);
 }
 
-async function getCategoryRestaurants(categoryId) {
-    return standardGet('/categories/restaurants', { categoryId });
+async function getCategoryRestaurants(categoryId, latitude, longitude) {
+    return standardGet('/categories/restaurants', {
+        categoryId,
+        latitude,
+        longitude,
+    });
 }
 
 module.exports = {

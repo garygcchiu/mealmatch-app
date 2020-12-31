@@ -119,8 +119,8 @@ export default function ExploreScreen({ navigation }) {
         }
 
         // attempt to get user location
-        getCurrentLocation().then((lng, lat) =>
-            console.log('got user location = ', lng + ',' + lat)
+        getCurrentLocation().then(({ latitude, longitude }) =>
+            console.log('got user location = ', latitude + ',' + longitude)
         );
 
         return () => {
