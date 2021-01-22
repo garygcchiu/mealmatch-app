@@ -85,10 +85,10 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 20,
-        fontWeight: '500',
+        fontWeight: '600',
         textAlign: 'left',
         color: 'white',
         alignSelf: 'center',
-        paddingLeft: 10,
+        paddingLeft: 12,
     },
 });
