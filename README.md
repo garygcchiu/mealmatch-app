@@ -9,6 +9,7 @@ Mobile application to help friends answer the question "what do you want to eat?
 Prerequisites:
 - Node.js v10.x or later
 - npm v5.x or later
+- [XCode and XCode Command Line Tools (if you want to use the iPhone Simulator)](https://docs.expo.io/workflow/ios-simulator/)
 
 
 1.  Install the [Expo CLI](https://github.com/garygcchiu/mealmatch-app.git): 
@@ -23,6 +24,11 @@ Prerequisites:
     npm i
     ```
 
+3. Start the app in the iPhone Simulator
+
+    ```bash
+    npm run ios
+    ```
 
 ## About
 
