@@ -35,3 +35,7 @@ Prerequisites:
 - AWS Amplify used to power [social sign-in and basic auth](https://docs.amplify.aws/lib/auth/getting-started/q/platform/js) 
 - Navigation implemented using [React Navigation](https://reactnavigation.org/)
 - React Contexts API used to maintain global state
+
+## Contributing 
+
+Looking to contribute? Visit the [Trello board](https://trello.com/b/5cjVYplA/mealmatchio) to see is prioritized, in the backlog, in progress, etc. Feel free to shoot me an email at gary.gc.chiu@gmail.com or open a PR if you're interested!
